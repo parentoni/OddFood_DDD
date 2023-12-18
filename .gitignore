@@ -1,0 +1,11 @@
+*node_modules
+
+*.env.development
+*.env.production
+*.env
+.DS_Store
+
+/scripts/tmp/*
+
+*dist
+node_modules
