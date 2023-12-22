@@ -25,18 +25,18 @@ export class VersionControl<T> {
   public addToRegister(version: string, value: T) {
     const clean = semver.valid(version);
     const check = Guard.againstNullOrUndefined(clean, "version");
-    if (check.isRight()) {
-      const guardAlreadyInRegister = Guard.inArray(version, Object.keys(this.register), "version");
-
-      if (guardAlreadyInRegister.isRight()) {
-        this.register[version] = value;
-      } else {
-        //In case of register error application must raise error.
-        throw new RangeError(`[VersionRegister(register)]: ${guardAlreadyInRegister.value.error.errorMessage}`);
-      }
-    } else {
-      //In case of register error application must raise error.
+    if (check.isLeft()) {
+      
       throw new TypeError(`[VersionRegister(register)]: ${check.value.error.errorMessage}`);
+    } else {
+      const guardAlreadyInRegister = Guard.inArray(version, Object.keys(this.register), "version");
+      if (guardAlreadyInRegister.isLeft()) {
+        throw new RangeError(`[VersionRegister(register)]: ${guardAlreadyInRegister}`);
+      } else {
+        this.register[version] = value;
+        //In case of register error application must raise error.
+      }
+      //In case of register error application must raise error.
     }
   }
 
@@ -73,11 +73,12 @@ export class VersionControl<T> {
     const cachedVersionData = this.register[version];
 
     const check = Guard.againstNullOrUndefined(cachedVersionData, "Cached version data");
-    if (check.isRight()) {
-      return right(cachedVersionData);
+    if (check.isLeft()) {
+      return left(check.value);
     }
 
-    return left(check.value);
+    return right(cachedVersionData);
+
   }
 
   public set default(version: string) {
@@ -120,14 +121,14 @@ export class VersionControl<T> {
 
   public contains(v: string): boolean {
     const checkEmpty = Guard.againstEmpty(Object.keys(this.register), "Version register");
-    if (checkEmpty.isRight()) {
+    if (checkEmpty.isLeft()) {
+      throw new TypeError(`[VersionRegister(contains)]: ${checkEmpty.value.error.errorMessage}`);
+      
+    } else {
       if (Object.keys(this.register).includes(v)) {
         return true;
       }
-
       return false;
-    } else {
-      throw new TypeError(`[VersionRegister(contains)]: ${checkEmpty.value.error.errorMessage}`);
     }
   }
 }

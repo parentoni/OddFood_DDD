@@ -45,5 +45,5 @@ export const left = <L, R>(l: L): Either<L, R> => {
 };
 
 export const right = <L, R>(a: R): Either<L, R> => {
-  return new Right<L, R>(a);
+  return new Right(a);
 };

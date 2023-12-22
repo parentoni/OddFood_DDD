@@ -15,6 +15,10 @@ export class BaseError<T extends IBaseError> {
     return this.value;
   }
 
+  get statusCode():number {
+    return this.value.statusCode
+  }
+
   public prettyError() {
     return `[${this.value.location}]: ${this.value.errorMessage}`;
   }

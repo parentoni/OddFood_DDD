@@ -1,20 +1,11 @@
 import * as express from "express";
 import { Request, Response } from "express";
 import { VersionControl, VersionControlRegister } from "../../../core/VersionControl";
-import { CommonUseCaseResult } from "../../../core/Response/UseCaseError";
-import { AppError } from "../../../core/Response/AppError";
-import { GenericError } from "../../../core/Response/Error";
-import { AuthenticatedRequest } from "./AutheticatedRequest";
+import { BaseError, GenericError, IBaseError } from "../../../core/Response/Error";
 import { Either } from "../../../core/Result";
 
 export type BaseControllerRequest<T extends Request> = (req: T, res: Response) => Promise<void | any> | void | any;
-export type CatalogedErrors =
-  | CommonUseCaseResult.Conflict
-  | CommonUseCaseResult.InvalidValue
-  | CommonUseCaseResult.UnexpectedError
-  | CommonUseCaseResult.Forbidden
-  | AppError.UnexpectedError
-  | GenericError<any>;
+
 
 export abstract class BaseController<T extends Request> {
   protected versionRegister = new VersionControl<BaseControllerRequest<T>>();
@@ -100,23 +91,10 @@ export abstract class BaseController<T extends Request> {
     return BaseController.jsonResponse(res, 500, error ? error : "Something went wrong");
   }
 
-  //TODO BETTER ERROR HANDLING
-  public errorHandler(res: express.Response, error: CatalogedErrors) {
-    switch (error.constructor) {
-      case CommonUseCaseResult.InvalidValue:
-        return this.clientError(res, error.error);
-      case CommonUseCaseResult.Conflict:
-        return this.conflict(res, error.error);
-      case AppError.UnexpectedError:
-        return this.fail(res, error.error);
-      case CommonUseCaseResult.UnexpectedError:
-        return this.fail(res, error.error);
-      case CommonUseCaseResult.Forbidden:
-        return this.forbidden(res, error.error);
-      case GenericError:
-        return this.clientError(res, error.error);
+  public errorHandler(res: express.Response, useCaseResponse: Either<BaseError<IBaseError>, any>) {
+    if (useCaseResponse.isLeft()) {
+      return BaseController.jsonResponse(res, useCaseResponse.value.statusCode, JSON.stringify(useCaseResponse.value))
     }
-
-    this.fail(res, "Unknown error");
   }
+
 }
