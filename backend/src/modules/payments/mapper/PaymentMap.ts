@@ -24,7 +24,8 @@ export class PaymentMap {
       user: userIdOrError.getRight(),
       externalId: externalIdOrError.getRight(),
       amount: persistent.amount,
-      payed: persistent.payed
+      payed: persistent.payed,
+      service: persistent.service
     }, new UniqueGlobalId(persistent._id.toString()))
   
     if (domain.isLeft()) {
@@ -40,7 +41,8 @@ export class PaymentMap {
       user: domain.user.toValue(),
       amount: domain.amount,
       payed: domain.payed,
-      external_id: domain.externalId.value
+      external_id: domain.externalId.value,
+      service: domain.service
     }
   }
 

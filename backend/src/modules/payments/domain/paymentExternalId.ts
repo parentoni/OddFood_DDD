@@ -9,7 +9,7 @@ export interface PaymentExternalIdProps {
 
 /**
  * @description A documentação do BACEN (https://bacen.github.io/pix-api/) determina que todo cobrança pix deva conter um TXID, que identifica o pix e deve conter de 26 a 35 caracteres. É essencial armazenar esse ID para garantir a rastreabilidade do PIX.
- * @module PaymentExternalId
+ * @auhtor Arthur Parentoni Guimaraes <parentoni.arthur@gmail.com>
  */
 
 export class PaymentExternalId extends ValueObject<PaymentExternalIdProps> {
@@ -25,7 +25,7 @@ export class PaymentExternalId extends ValueObject<PaymentExternalIdProps> {
   /**
    * 
    * @method create
-   * @description Gera um novo object PaymentExternalId com o TXID passado.
+   * @description Gera um novo object PaymentExternalId com o TXID informado.
    * 
    */
   public static create (props: PaymentExternalIdProps): Either<CommonUseCaseResult.InvalidValue, PaymentExternalId> {
@@ -45,7 +45,11 @@ export class PaymentExternalId extends ValueObject<PaymentExternalIdProps> {
 
     return right(new PaymentExternalId(props))
   }
-
+  
+  /**
+   * @method createNew
+   * @description Generate a new, valid PaymentExternalId, without the necessity with of passing an id.
+   * */
   public static createNew ():PaymentExternalId {
     const txid = crypto.randomBytes(16).toString('hex')
     return new PaymentExternalId({txid: txid})
