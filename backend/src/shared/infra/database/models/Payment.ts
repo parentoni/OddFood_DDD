@@ -1,5 +1,7 @@
 import mongoose, { Mongoose } from "mongoose";
 import { SUPPORTED_PAYMENT_SERVICES } from "../../../../modules/payments/services/implementations/payment_services";
+import { DomainEvents } from "../../../domain/events/DomainEvents";
+import { UniqueGlobalId } from "../../../domain/UniqueGlobalD";
 
 const PaymentSchema = new mongoose.Schema({
   user: {type: mongoose.Types.ObjectId, required: true}, // Id do usuário
@@ -16,7 +18,11 @@ export interface PersistentPayment {
   amount: number,
   external_id: string
   service: SUPPORTED_PAYMENT_SERVICES
-} 
+}
+
+// Set up subscriptions triggers
+PaymentSchema.post("save", (payment) => DomainEvents.dispatchEventsForAggregate(new UniqueGlobalId(payment._id.toString())))
+PaymentSchema.post("findOneAndUpdate", (payment) => DomainEvents.dispatchEventsForAggregate(new UniqueGlobalId(payment._id.toString())))
 
 const PaymentModel = mongoose.model('payment', PaymentSchema)
 

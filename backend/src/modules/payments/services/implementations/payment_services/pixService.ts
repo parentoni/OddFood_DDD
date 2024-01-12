@@ -1,7 +1,9 @@
 import { CommonUseCaseResult } from "../../../../../shared/core/Response/UseCaseError";
-import { Either, left, right } from "../../../../../shared/core/Result";
-import { CreateInvoiceProps, IPaymentService } from "../../IPaymentServices";
+import { Either, Left, left, right } from "../../../../../shared/core/Result";
 import { IPixApi } from "../../IPixAPI";
+import { PixCob } from "../../../dtos/PixDTO";
+import { CreateInvoiceProps, CallbackInterpreterProps, IPaymentService,  } from "../../IPaymentServices"
+
 
 /**
  * @description Service that handles all PIX invoices.
@@ -38,5 +40,32 @@ export class PixService implements IPaymentService {
       variable: "PROPS" 
     }))
   }
+
+  public async callbackInterpreter(props: CallbackInterpreterProps<PixCob>): Promise<Either<CommonUseCaseResult.InvalidValue, null>> {
+
+    //Check if payed value is payment value
+    if (props.payment.amount !== Number(props.paymentDTO.valor.original)){
+      return left(CommonUseCaseResult.InvalidValue.create({
+        location: `${PixService.name}.${this.callbackInterpreter.name}`,
+        errorMessage: "PIX payment did not transfered right value.",
+        printableErrorMessage: "O pagamento pix nao transferiu o valor correto",
+        variable: 'AMOUNT'
+      }))}
+
+    //Check if payment was already paid
+    if (props.payment.payed) {
+      return left(CommonUseCaseResult.Conflict.create({
+        location: `{PixService.name}.${this.callbackInterpreter.name}`,
+        errorMessage: "Payment is already paid",
+        printableErrorMessage: "O Pagamento pix ja foi pago",
+        variable: "PAYMENT.PAYED"
+      }))
+    }
+    //Mark payment as paid
+    props.payment.pay()
+
+    return right(null)
+  }
+
 
 }

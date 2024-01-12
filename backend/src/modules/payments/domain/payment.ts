@@ -5,6 +5,7 @@ import { UniqueGlobalId } from "../../../shared/domain/UniqueGlobalD";
 import { CommonUseCaseResult } from "../../../shared/core/Response/UseCaseError";
 import { PaymentExternalId } from "./paymentExternalId";
 import { SUPPORTED_PAYMENT_SERVICES } from "../services/implementations/payment_services";
+import { PaymentPayed } from "./events/PaymentPayed";
 
 export interface IPaymentProps {
   user: UniqueGlobalId,
@@ -38,6 +39,12 @@ export class Payment extends AggregateRoot<IPaymentProps> {
 
   get service(): SUPPORTED_PAYMENT_SERVICES {
     return this.props.service
+  }
+
+  // Add payment event to events register
+  public pay(): void {
+    this.props.payed = true
+    this.addDomainEvent(new PaymentPayed(new Date(), this))
   }
 
 
