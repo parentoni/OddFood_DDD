@@ -51,13 +51,33 @@ export class UserRepo implements IUserRepo {
             if (!user) {
                 return right(false)
             }
-
             return left(CommonUseCaseResult.InvalidValue.create({
             errorMessage: `An user was already found using these params: ${filter.dto}`,
             location: `${UserRepo.name}.${this.exists.name}`,
             variable: "USER_PARAMS"}))
+
         }catch (error) {
             return left(CommonUseCaseResult.UnexpectedError.create(error))
+        }
+    }
+
+    public async find_one(filter: { dto: Partial<IUser> }) : RepositoryBaseResult<IUser> {
+        try {
+            const user = await this.userModel.findOne(filter.dto)
+
+            if (!user) {
+                return left(
+                    CommonUseCaseResult.InvalidValue.create({
+                    errorMessage: `A user could not be found with the specified params: ${filter.dto}`,
+                    location: `${UserRepo.name}.${this.exists.name}`,
+                    variable: "USER_PARAMS"}))
+            }
+
+            return right(user)
+
+
+        }catch (err) {
+            return left(CommonUseCaseResult.UnexpectedError.create(err))
         }
     }
     
