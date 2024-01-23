@@ -33,7 +33,7 @@ export abstract class BaseController<T extends Request> {
     }
   }
 
-  public static jsonResponse(res: express.Response, code: number, message: string) {
+  public static jsonResponse(res: express.Response, code: number, message: any) {
     return res.status(code).json({ message });
   }
 
@@ -93,7 +93,7 @@ export abstract class BaseController<T extends Request> {
 
   public errorHandler(res: express.Response, useCaseResponse: Either<BaseError<IBaseError>, any>) {
     if (useCaseResponse.isLeft()) {
-      return BaseController.jsonResponse(res, useCaseResponse.value.statusCode, JSON.stringify(useCaseResponse.value))
+      return BaseController.jsonResponse(res, useCaseResponse.value.statusCode, useCaseResponse.value)
     }
   }
 

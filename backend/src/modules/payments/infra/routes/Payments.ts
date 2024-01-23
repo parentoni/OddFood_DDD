@@ -1,8 +1,12 @@
 import { Router } from "express"
-import { testCreateNewPixController } from "../../useCases/testCreateNewPix"
+import { createInvoiceController } from "../../useCases/createInvoice"
+import { pixCallbackController } from "../../useCases/pixCallback"
 
 const paymentsRouter = Router()
 
-paymentsRouter.get('/test/create', (req, res) => testCreateNewPixController.execute(req, res))
+paymentsRouter.post('/create', (req, res) => createInvoiceController.execute(req, res))
+
+// Webhooks callbacks
+paymentsRouter.post('/webhook/pix', (req, res) => pixCallbackController.execute(req, res))
 
 export {paymentsRouter}

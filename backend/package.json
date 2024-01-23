@@ -7,7 +7,8 @@
     "start-dev": "cross-env NODE_ENV=development nodemon",
     "start-production": "pm2 start pm2.json",
     "pretty": "prettier --write \"src/**/*.ts\"",
-    "build": "tsc"
+    "build": "tsc",
+    "test": "jest --config jest.config.js --runInBand --no-cache --detectOpenHandles"
   },
   "keywords": [],
   "author": "",
