@@ -20,4 +20,3 @@ describe("Payment external id", () => {
 
 
 })
-
