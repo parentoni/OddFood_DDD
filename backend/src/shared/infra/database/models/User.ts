@@ -13,7 +13,7 @@ export enum USER_ROLE {
 const UserSchema = new mongoose.Schema({
     name : {type : String},
     email : {type : String},
-    grade : {type : USER_GRADE},
+    // grade : {type : USER_GRADE},
     role : {type : USER_ROLE},
     password : {type : String},
 })
@@ -21,7 +21,7 @@ const UserSchema = new mongoose.Schema({
 export interface IUserNoId {
     name : string,
     email : string,
-    grade : USER_GRADE,
+    // grade : USER_GRADE,
     role : USER_ROLE,
     password : string
 }
@@ -29,7 +29,7 @@ export interface IUser {
     _id : String,
     name : string,
     email : string,
-    grade : USER_GRADE,
+    // grade : USER_GRADE,
     role : USER_ROLE,
     password : string
 }

@@ -5,16 +5,16 @@ import { USER_GRADE } from "../../../../shared/infra/database/models/User";
 
 type UserGradeResponse = Either<CommonUseCaseResult.InvalidValue | CommonUseCaseResult.UnexpectedError, UserGrade >
 
-interface IUserRole {
+export interface INumberProp {
     value : number
 }
 
-export class UserGrade extends ValueObject<IUserRole> {
+export class UserGrade extends ValueObject<INumberProp> {
     get value() : USER_GRADE {
         return this.props.value
     }
 
-    public static create(props : IUserRole) : UserGradeResponse {
+    public static create(props : INumberProp) : UserGradeResponse {
         const GradeExists =  Object.values(USER_GRADE).includes(props.value)
 
         if (!GradeExists) {

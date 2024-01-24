@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { VersionControl, VersionControlRegister } from "../../../core/VersionControl";
 import { BaseError, GenericError, IBaseError } from "../../../core/Response/Error";
 import { Either } from "../../../core/Result";
+import { CommonUseCaseResult } from "../../../core/Response/UseCaseError";
 
 export type BaseControllerRequest<T extends Request> = (req: T, res: Response) => Promise<void | any> | void | any;
 
@@ -91,7 +92,7 @@ export abstract class BaseController<T extends Request> {
     return BaseController.jsonResponse(res, 500, error ? error : "Something went wrong");
   }
 
-  public errorHandler(res: express.Response, useCaseResponse: Either<BaseError<IBaseError>, any>) {
+  public errorHandler(res: express.Response, useCaseResponse: Either<BaseError<IBaseError> | CommonUseCaseResult.UnexpectedError | CommonUseCaseResult.InvalidValue, any>) {
     if (useCaseResponse.isLeft()) {
       return BaseController.jsonResponse(res, useCaseResponse.value.statusCode, useCaseResponse.value)
     }

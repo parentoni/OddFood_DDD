@@ -15,15 +15,15 @@ export interface IUserProps {
     email : UserEmail,
     password : UserPassword,
     name : UserName,
-    grade : UserGrade,
+    // grade : UserGrade,
     role : UserRole
 }
 
 export class User extends AggregateRoot<IUserProps> {
     
-    get userId() : UniqueGlobalId {
-        return new UniqueGlobalId()
-    }
+    // get userId() : UniqueGlobalId {
+    //     return new UniqueGlobalId()
+    // }
 
     get name() : UserName {
         return this.name
@@ -32,9 +32,9 @@ export class User extends AggregateRoot<IUserProps> {
         return this.role
     }
 
-    get grade() : UserGrade {
-        return this.grade
-    }
+    // get grade() : UserGrade {
+    //     return this.grade
+    // }
 
     get email() : UserEmail {
         return this.email
@@ -49,7 +49,7 @@ export class User extends AggregateRoot<IUserProps> {
             {argument : props.role.value, argumentName : "USER_ROLE"},
             {argument : props.email.value, argumentName : "USER_EMAIL"},
             {argument : props.password.value, argumentName : "USER_PASSWORD"},
-            {argument : props.grade.value, argumentName : "USER_GRADE"}
+            // {argument : props.grade.value, argumentName : "USER_GRADE"}
         ])
 
         if (GuardResponse.isLeft()) {

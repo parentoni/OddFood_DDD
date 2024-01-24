@@ -17,25 +17,30 @@ export class UserRepo implements IUserRepo {
 
     }
 
-    public async create(filter : {dto : IUserNoId}) : RepositoryBaseResult<IUser> {       
-        const password = await bcrypt.hash(this.saltedRounds, filter.dto.password)
-        filter.dto.password = password
-
+    public async save(filter : {dto : IUser}) : RepositoryBaseResult<IUser> { 
         try {
+        const exists = await this.userModel.exists({_id : filter.dto._id})
 
-            const NewUser = await this.userModel.create(filter.dto)
-
-            if (!NewUser) {
-                return left(CommonUseCaseResult.UnexpectedError.create({
-                    errorMessage: `Unexpected error while creating user: ${filter.dto}`,
-                    location: `${UserRepo.name}.${this.create.name}`,
-                    variable: "USER_REPO_CREATE_USER"
-                }))
+        if (exists) {
+            await this.userModel.updateOne({_id : filter.dto._id}, {...filter.dto})
+        } else {
+            const password = await bcrypt.hash(this.saltedRounds, filter.dto.password)
+            filter.dto.password = password
+    
+            
+    
+                const NewUser = await this.userModel.create(filter.dto)
+    
+                if (!NewUser) {
+                    return left(CommonUseCaseResult.UnexpectedError.create({
+                        errorMessage: `Unexpected error while creating user: ${filter.dto}`,
+                        location: `${UserRepo.name}.${this.save.name}`,
+                        variable: "USER_REPO_CREATE_USER"
+                    }))
+                }
             }
-
-            return right(
-                NewUser
-            )
+            const user = await this.userModel.findOne({_id : filter.dto._id})
+            return right(user)
         }catch (err) {
             return left(CommonUseCaseResult.UnexpectedError.create(err))
         }
