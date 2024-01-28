@@ -7,13 +7,13 @@ import { Guard } from "../../../../shared/core/Guard";
 type ItemDescriptionResponse = Promise<Either<CommonUseCaseResult.InvalidValue | CommonUseCaseResult.UnexpectedError, ItemDescription>>
 
 
-export class ItemDescription extends ValueObject<INumberProp>{
+export class ItemDescription extends ValueObject<IDefaultProp>{
 
-    get value() : number {
+    get value() : string {
         return this.props.value
     }
 
-    public static async create( props : INumberProp) : ItemDescriptionResponse {
+    public static async create( props : IDefaultProp) : ItemDescriptionResponse {
 
         const GuardResponse = Guard.againstNullOrUndefined(props.value, "ITEM_DESCRIPTION")
 

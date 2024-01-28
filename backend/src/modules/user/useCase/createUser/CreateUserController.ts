@@ -24,8 +24,6 @@ export class CreateUserController extends BaseController<Request> {
                 return this.errorHandler(res, result)
             }
 
-            console.log(dto.role)
-
             const token = await authService.signJWT({
                 uid: result.value._id as string,
                 email: dto.email,

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export interface Price {
-    name : String,
+    name : string,
     price : number
 }
 
@@ -11,7 +11,8 @@ const ItemSchema = new mongoose.Schema({
     description : {type : String, required : true},
     image : {type : String, required : false},
     isPrimary : {type : Boolean, required : true},
-    cost : {type : Number, required : true}
+    cost : {type : Number, required : true},
+    specialDay : {type : Number, required: true}
 })
 
 export interface IItemNoId {
@@ -20,7 +21,8 @@ export interface IItemNoId {
     description : string,
     image : string,
     isPrimary : Boolean,
-    cost : Number
+    cost : number,
+    specialDay : number,
 }
 
 export interface IItem {
@@ -30,7 +32,9 @@ export interface IItem {
     description : string,
     image : string,
     isPrimary : Boolean,
-    cost : Number
+    cost : number,
+    specialDay : number,
+
 }
 
 export default { name: "item", schema: ItemSchema}

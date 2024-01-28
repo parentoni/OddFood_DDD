@@ -10,6 +10,7 @@ import { CommonUseCaseResult } from "../../../shared/core/Response/UseCaseError"
 import { Guard } from "../../../shared/core/Guard";
 import { ItemCost } from "./itemprops/itemCost";
 import { Entity } from "../../../shared/domain/Entity";
+import { ItemSpecialDay } from "./itemprops/itemSpecialDay";
 
 type ItemResponse = Either<CommonUseCaseResult.InvalidValue | CommonUseCaseResult.UnexpectedError, Item>
 
@@ -19,13 +20,18 @@ export interface IItemProps {
     picture : ItemPicture,
     description : ItemDescription,
     cost : ItemCost,
-    isPrimary : Boolean
+    isPrimary : Boolean,
+    specialDay : ItemSpecialDay
 }
 
-export class Item extends Entity<IItemProps> {
+export class Item extends AggregateRoot<IItemProps> {
     
     get userId() : Boolean {
         return this.props.isPrimary
+    }
+
+    get specialDay() : ItemSpecialDay {
+        return this.specialDay
     }
 
     get name() : ItemName {
