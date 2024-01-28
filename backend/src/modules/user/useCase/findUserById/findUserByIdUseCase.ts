@@ -2,9 +2,7 @@ import { Guard } from "../../../../shared/core/Guard";
 import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseError";
 import { left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
-import { User } from "../../domain/User";
 import { IUserRepo } from "../../repository/IUserRepo";
-import { FindUserByIdDTO } from "./findUserByIdDTO";
 import { FindUserByIdResponse } from "./findUserByIdResponse";
 
 export class FindUserByIdUseCase implements UseCase<string, FindUserByIdResponse> {

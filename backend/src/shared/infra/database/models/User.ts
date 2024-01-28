@@ -34,4 +34,5 @@ export interface IUser {
     password : string
 }
 
-export default { name: "user", schema: UserSchema };
+const UserModel = mongoose.model('user', UserSchema)
+export { UserModel }

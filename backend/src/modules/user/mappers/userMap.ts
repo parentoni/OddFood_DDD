@@ -5,7 +5,7 @@ import { User } from "../domain/User";
 
 export class UserMap {
 
-    public static toObject(props : User) :  Either<CommonUseCaseResult.UnexpectedError, IUser>{
+    public static toPersistent(props : User) :  Either<CommonUseCaseResult.UnexpectedError, IUser>{
         
         try {
             const UserObject = {
@@ -21,4 +21,6 @@ export class UserMap {
         }
        
     }
+
+  //todo: Create toDomain
 }

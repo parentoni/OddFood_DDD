@@ -1,35 +1,31 @@
-import { IUserNoId } from "../../../shared/infra/database/models/User";
 import { IUserRepo } from "./IUserRepo";
+import { UserModel } from "../../../shared/infra/database/models/User";
 import { RepositoryBaseResult } from "../../../shared/core/IBaseRepository";
 import { IUser } from "../../../shared/infra/database/models/User";
-import mongoose from "mongoose";
 import { left, right } from "../../../shared/core/Result";
 import { CommonUseCaseResult } from "../../../shared/core/Response/UseCaseError";
+import { User } from "../domain/User";
+import { UserMap } from "../mappers/userMap";
 const bcrypt = require("bcrypt")
+
 export class UserRepo implements IUserRepo {
-    
-    private readonly userModel
 
     private readonly saltedRounds = 10
 
-    constructor(models : mongoose.Models) {
-        this.userModel = models.user
-
-    }
-
-    public async save(filter : {dto : IUser}) : RepositoryBaseResult<IUser> { 
+    public async save(filter : {dto : IUser}) : RepositoryBaseResult<User> { 
         try {
-        const exists = await this.userModel.exists({_id : filter.dto._id})
+        const exists = await UserModel.exists(filter.dto._id)
 
         if (exists) {
-            await this.userModel.updateOne({_id : filter.dto._id}, {...filter.dto})
+            await UserModel.updateOne({_id : filter.dto._id}, {...filter.dto})
         } else {
+            //todo: move hash logic to UserPassword -> UserMap
             const password = await bcrypt.hash(this.saltedRounds, filter.dto.password)
             filter.dto.password = password
     
             
     
-                const NewUser = await this.userModel.create(filter.dto)
+                const NewUser = await UserModel.create(filter.dto)
     
                 if (!NewUser) {
                     return left(CommonUseCaseResult.UnexpectedError.create({
@@ -39,8 +35,10 @@ export class UserRepo implements IUserRepo {
                     }))
                 }
             }
-            const user = await this.userModel.findOne({_id : filter.dto._id})
-            return right(user)
+            const user = await UserModel.findOne({_id : filter.dto._id})
+
+            //todo: Transform to aggregate before returning 
+            return right(user.toObject())
         }catch (err) {
             return left(CommonUseCaseResult.UnexpectedError.create(err))
         }
@@ -51,7 +49,7 @@ export class UserRepo implements IUserRepo {
     public async exists(filter : {dto : Partial<IUser>}) : RepositoryBaseResult<true | false> {
 
         try {
-            const user = await this.userModel.findOne(filter.dto)
+            const user = await UserModel.findOne(filter.dto)
             
             if (!user) {
                 return right(false)
@@ -68,7 +66,7 @@ export class UserRepo implements IUserRepo {
 
     public async find_one(filter: { dto: Partial<IUser> }) : RepositoryBaseResult<IUser> {
         try {
-            const user = await this.userModel.findOne(filter.dto)
+            const user = await UserModel.findOne(filter.dto)
 
             if (!user) {
                 return left(
