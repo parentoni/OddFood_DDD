@@ -1,3 +1,3 @@
 export interface FindUserByIdDTO {
-  id: string
+    id : string
 }

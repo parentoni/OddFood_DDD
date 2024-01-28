@@ -69,6 +69,19 @@ export class Guard {
     return right(true);
   }
 
+  public static againstAtMost(numChars: number, text : string) : GuardResponse {
+    return text.length <= numChars?
+    right(true) :
+    left(
+      CommonUseCaseResult.InvalidValue.create({
+        errorMessage: `${text} length is larger than ${numChars}.`,
+        location: `${Guard.name}.${this.againstAtMost.name}`,
+        variable: text
+
+      })
+    )
+  }
+
   public static isOneOf(value: any, validValues: any[], argumentName: string): GuardResponse {
     let isValid = false;
     for (let validValue of validValues) {
