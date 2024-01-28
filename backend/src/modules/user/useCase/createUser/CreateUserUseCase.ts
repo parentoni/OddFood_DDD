@@ -26,7 +26,7 @@ export class CreateUserUseCase implements UseCase<IUserNoId,CreateUserResponse> 
     }
 
     async execute(props : IUserNoId) : CreateUserResponse {
-        const EmailOrError = await UserEmail.create({value : props.email.trim()})
+        const EmailOrError = UserEmail.create({value : props.email.trim()})
         const PasswordOrError = UserPassword.create({value : props.password.trim()})
         const RoleOrError = UserRole.create({value : 0})
         const UsernameOrError = UserName.create({value : props.name.trim()})
@@ -61,7 +61,7 @@ export class CreateUserUseCase implements UseCase<IUserNoId,CreateUserResponse> 
             return left(UserOrError.value)
         }
         try {
-            const objectUser = UserMap.toObject(UserOrError.value)
+            const objectUser = UserMap.toPersistent(UserOrError.value)
             if (objectUser.isLeft()) {
                 return left(objectUser.value)
             }
@@ -70,7 +70,14 @@ export class CreateUserUseCase implements UseCase<IUserNoId,CreateUserResponse> 
             if (NewUser.isLeft()) {
                 return left(NewUser.value)
             }
-            return right(NewUser.value)
+
+            const userPersistent = UserMap.toPersistent(NewUser.value)
+
+            if (userPersistent.isLeft()){
+                return left(userPersistent.value)
+            }
+
+            return right(userPersistent.value)
             
         }catch (error) {
             return left(CommonUseCaseResult.UnexpectedError.create(error))

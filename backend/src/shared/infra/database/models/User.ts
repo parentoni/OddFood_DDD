@@ -26,7 +26,7 @@ export interface IUserNoId {
     password : string
 }
 export interface IUser {
-    _id : String,
+    _id : string,
     name : string,
     email : string,
     // grade : USER_GRADE,

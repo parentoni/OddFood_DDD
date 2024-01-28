@@ -43,7 +43,7 @@ export class User extends AggregateRoot<IUserProps> {
         return this.password
     }
 
-    public static create(props : IUserProps) : UserResponse {
+    public static create(props : IUserProps, id? : UniqueGlobalId) : UserResponse {
         const GuardResponse = Guard.againstNullOrUndefinedBulk([
             {argument : props.name.value, argumentName : "USER_NAME"},
             {argument : props.role.value, argumentName : "USER_ROLE"},
@@ -56,7 +56,7 @@ export class User extends AggregateRoot<IUserProps> {
             return left(GuardResponse.value)
         }
 
-        return right(new User(props))
+        return right(new User(props, id))
     }
 
 }
