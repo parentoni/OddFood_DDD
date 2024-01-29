@@ -14,17 +14,22 @@ export class UserRepo implements IUserRepo {
 
     public async save(filter : {dto : IUser}) : RepositoryBaseResult<User> { 
         try {
-        const exists = await UserModel.exists(filter.dto._id)
+        const exists = await UserModel.exists({_id : filter.dto._id})
 
         if (exists) {
             await UserModel.updateOne({_id : filter.dto._id}, {...filter.dto})
         } else {
             //todo: move hash logic to UserPassword -> UserMap
+            
             const password = await bcrypt.hash(this.saltedRounds, filter.dto.password)
             filter.dto.password = password
     
-            
+                const exists = await this.exists({dto : {email : filter.dto.email}})
     
+                if (exists.isLeft()) {
+                    return left(exists.value)
+                }
+
                 const NewUser = await UserModel.create(filter.dto)
     
                 if (!NewUser) {
@@ -36,9 +41,22 @@ export class UserRepo implements IUserRepo {
                 }
             }
             const user = await UserModel.findOne({_id : filter.dto._id})
+            
+            if (user === null) {
+                return left(
+                    CommonUseCaseResult.InvalidValue.create({
+                    errorMessage: `[1]: A user could not be found with the specified params: ${filter.dto}`,
+                    location: `${UserRepo.name}.${this.exists.name}`,
+                    variable: "USER_PARAMS"}))
+            }
+
+            const userDomain = UserMap.toDomain(user.toObject())
+            if (userDomain.isLeft()) {
+                return left(userDomain.value)
+            }
 
             //todo: Transform to aggregate before returning 
-            return right(user.toObject())
+            return right(userDomain.value)
         }catch (err) {
             return left(CommonUseCaseResult.UnexpectedError.create(err))
         }
@@ -64,19 +82,24 @@ export class UserRepo implements IUserRepo {
         }
     }
 
-    public async find_one(filter: { dto: Partial<IUser> }) : RepositoryBaseResult<IUser> {
+    public async find_one(filter: { dto: Partial<IUser> }) : RepositoryBaseResult<User> {
         try {
             const user = await UserModel.findOne(filter.dto)
 
-            if (!user) {
+            if (!user || user === null) {
                 return left(
                     CommonUseCaseResult.InvalidValue.create({
                     errorMessage: `A user could not be found with the specified params: ${filter.dto}`,
                     location: `${UserRepo.name}.${this.exists.name}`,
                     variable: "USER_PARAMS"}))
             }
-
-            return right(user)
+            
+            const userDomain = UserMap.toDomain(user.toObject())
+            
+            if (userDomain.isLeft()) {
+                return left(userDomain.value)
+            }
+            return right(userDomain.value)
 
 
         }catch (err) {

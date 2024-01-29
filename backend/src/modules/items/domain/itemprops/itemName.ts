@@ -5,7 +5,7 @@ import { Either, left, right } from "../../../../shared/core/Result";
 import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseError";
 import { Guard } from "../../../../shared/core/Guard";
 
-type ItemNameResponse = Promise<Either<CommonUseCaseResult.InvalidValue | CommonUseCaseResult.UnexpectedError, ItemName>>
+type ItemNameResponse = Either<CommonUseCaseResult.InvalidValue | CommonUseCaseResult.UnexpectedError, ItemName>
 
 export class ItemName extends ValueObject<IDefaultProp>{
 
@@ -13,7 +13,7 @@ export class ItemName extends ValueObject<IDefaultProp>{
         return this.props.value
     }
 
-    public static async create( props : IDefaultProp) : ItemNameResponse {
+    public static  create( props : IDefaultProp) : ItemNameResponse {
 
         const GuardResponse = Guard.againstNullOrUndefined(props.value.trim(), "ITEM_NAME")
 

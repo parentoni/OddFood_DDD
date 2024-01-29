@@ -8,7 +8,7 @@ import { Guard } from "../../../../shared/core/Guard";
 import {INumberProp} from "../../../user/domain/userProps/userGrade"
 
 
-type ItemDayResponse = Promise<Either<CommonUseCaseResult.InvalidValue | CommonUseCaseResult.UnexpectedError, ItemSpecialDay>>
+type ItemDayResponse =Either<CommonUseCaseResult.InvalidValue | CommonUseCaseResult.UnexpectedError, ItemSpecialDay>
 
 export class ItemSpecialDay extends ValueObject<INumberProp>{
 
@@ -16,7 +16,7 @@ export class ItemSpecialDay extends ValueObject<INumberProp>{
         return this.props.value
     }
 
-    public static async create( props : INumberProp) : ItemDayResponse {
+    public static  create( props : INumberProp) : ItemDayResponse {
 
         const GuardResponse = Guard.againstNullOrUndefined(props.value, "ITEM_PICTURE")
 

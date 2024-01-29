@@ -5,7 +5,7 @@ import { Either, left, right } from "../../../../shared/core/Result";
 import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseError";
 import { Guard } from "../../../../shared/core/Guard";
 
-type ItemPictureResponse = Promise<Either<CommonUseCaseResult.InvalidValue | CommonUseCaseResult.UnexpectedError, ItemPicture>>
+type ItemPictureResponse = Either<CommonUseCaseResult.InvalidValue | CommonUseCaseResult.UnexpectedError, ItemPicture>
 
 export class ItemPicture extends ValueObject<IDefaultProp>{
 
@@ -13,7 +13,7 @@ export class ItemPicture extends ValueObject<IDefaultProp>{
         return this.props.value
     }
 
-    public static async create( props : IDefaultProp) : ItemPictureResponse {
+    public static  create( props : IDefaultProp) : ItemPictureResponse {
 
         const GuardResponse = Guard.againstNullOrUndefined(props.value.trim(), "ITEM_PICTURE")
 

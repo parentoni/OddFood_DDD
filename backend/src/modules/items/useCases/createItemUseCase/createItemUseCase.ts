@@ -25,12 +25,12 @@ export class CreateItemUseCase implements UseCase<IItemNoId, CreateItemResponse 
     }
 
     async execute(item : IItemNoId) : CreateItemResponse {
-        const nameOrError = await ItemName.create({value : item.name})
-        const costOrError = await ItemCost.create({value : item.cost as number})
-        const descriptionOrError = await ItemDescription.create({value : item.description})
-        const imageOrError = await ItemPicture.create({value : item.image})
-        const pricesOrError = await ItemPrices.create(item.prices)
-        const specialDayOrError = await ItemSpecialDay.create({value : item.specialDay as number})
+        const nameOrError =  ItemName.create({value : item.name})
+        const costOrError =  ItemCost.create({value : item.cost as number})
+        const descriptionOrError =  ItemDescription.create({value : item.description})
+        const imageOrError =  ItemPicture.create({value : item.image})
+        const pricesOrError =  ItemPrices.create(item.prices)
+        const specialDayOrError =  ItemSpecialDay.create({value : item.specialDay as number})
 
         if (nameOrError.isLeft()) {
             return left(nameOrError.value)
@@ -66,7 +66,7 @@ export class CreateItemUseCase implements UseCase<IItemNoId, CreateItemResponse 
         }
 
         try {
-            const itemDomain = ItemMap.toDomain(ItemOrError.value)
+            const itemDomain = ItemMap.toPersistent(ItemOrError.value)
 
             if (itemDomain.isLeft()) {
                 return left(itemDomain.value)

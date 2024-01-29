@@ -8,6 +8,6 @@ import { FindUserByIdUseCase } from "../../useCase/findUserById/findUserByIdUseC
 import { FindUserByIdController } from "../../useCase/findUserById/findUserByIdController";
 const userRouter = express.Router()
 
-userRouter.post("/get/:id", (req, res)=> new FindUserByIdController( new FindUserByIdUseCase(new UserRepo(models))).execute(req, res))
+userRouter.post("/:id", (req, res)=> new FindUserByIdController( new FindUserByIdUseCase(new UserRepo())).execute(req, res))
 
 export {userRouter}

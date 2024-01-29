@@ -37,4 +37,6 @@ export interface IItem {
 
 }
 
-export default { name: "item", schema: ItemSchema}
+const ItemModel = mongoose.model('item', ItemSchema)
+
+export { ItemModel }

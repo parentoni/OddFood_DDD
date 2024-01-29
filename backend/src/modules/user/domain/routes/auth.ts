@@ -4,9 +4,9 @@ import { CreateUserController } from "../../useCase/createUser/CreateUserControl
 import { CreateUserUseCase } from "../../useCase/createUser/CreateUserUseCase";
 import { UserRepo } from "../../repository/userRepo";
 import { authService } from "../../services";
-
+//
 const authRouter = express.Router()
 
-authRouter.post("/register", (req, res)=> new CreateUserController(new CreateUserUseCase(new UserRepo(models)), authService).execute(req,res))
+authRouter.post("/register", (req, res)=> new CreateUserController(new CreateUserUseCase(new UserRepo()), authService).execute(req,res))
 
 export {authRouter}

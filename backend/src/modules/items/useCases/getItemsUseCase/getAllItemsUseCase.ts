@@ -15,7 +15,6 @@ export class GetAllItemsUseCase implements UseCase<string, RepositoryBaseResult<
   async execute(): RepositoryBaseResult<IItem[]>  {
 
     try {
-
       const items = await this.itemRepo.find_many({dto : {}})
     
       if (items.isLeft()) {

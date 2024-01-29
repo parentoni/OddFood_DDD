@@ -52,7 +52,7 @@ export class Item extends AggregateRoot<IItemProps> {
         return this.password
     }
 
-    public static create(props : IItemProps) : ItemResponse {
+    public static create(props : IItemProps, id? : UniqueGlobalId) : ItemResponse {
         const GuardResponse = Guard.againstNullOrUndefinedBulk([
             {argument : props.name.value, argumentName : "USER_NAME"},
             {argument : props.description.value, argumentName : "USER_EMAIL"},
@@ -64,7 +64,7 @@ export class Item extends AggregateRoot<IItemProps> {
             return left(GuardResponse.value)
         }
 
-        return right(new Item(props))
+        return right(new Item(props, id))
     }
 
 }
