@@ -20,8 +20,7 @@ export class UserRepo implements IUserRepo {
             await UserModel.updateOne({_id : filter.dto._id}, {...filter.dto})
         } else {
             //todo: move hash logic to UserPassword -> UserMap
-            
-            const password = await bcrypt.hash(this.saltedRounds, filter.dto.password)
+            const password = await bcrypt.hash(filter.dto.password.toString(), this.saltedRounds)
             filter.dto.password = password
     
                 const exists = await this.exists({dto : {email : filter.dto.email}})

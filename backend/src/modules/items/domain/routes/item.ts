@@ -8,6 +8,6 @@ import { GetAllItemsUseCase } from "../../useCases/getItemsUseCase/getAllItemsUs
 
 const itemRouter = express.Router()
 
-itemRouter.post("/:id", (req, res)=> new CreateItemController( new CreateItemUseCase(new ItemRepo())).execute(req, res))
+itemRouter.post("/create", (req, res)=> new CreateItemController( new CreateItemUseCase(new ItemRepo())).execute(req, res))
 itemRouter.get("/all", (req, res) => new GetAllItemsController(new GetAllItemsUseCase(new ItemRepo())).execute(req, res))
 export {itemRouter}

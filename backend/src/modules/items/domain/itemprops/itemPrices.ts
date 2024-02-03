@@ -16,7 +16,7 @@ export class ItemPrices extends ValueObject<Price[]>{
     public static  create( props : Price[]) : ItemPricesResponse {
 
         for (const price of props) {
-            const GuardResponse = Guard.againstNullOrUndefinedBulk([{argument : price.name, argumentName : "PRICE_NAME"}, {argument : price.price, argumentName : "PRICE_NAME"}])
+            const GuardResponse = Guard.againstNullOrUndefinedBulk([{argument : price.name, argumentName : "PRICE_NAME"}, {argument : price.price, argumentName : "PRICE_NAME"}, {argument : price.cost, argumentName : "PRICE_COST"}])
             if (GuardResponse.isLeft()) {
                 return left(CommonUseCaseResult.InvalidValue.create({
                     errorMessage: `${GuardResponse.value.error.errorMessage}`,
