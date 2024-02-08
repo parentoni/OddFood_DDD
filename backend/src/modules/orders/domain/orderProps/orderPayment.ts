@@ -6,23 +6,23 @@ import { IDefaultProp } from "../../../user/domain/userProps/userEmail";
 import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseError";
 
 
-export class OrderUsername extends ValueObject<IDefaultProp> {
+export class OrderPayment extends ValueObject<IDefaultProp> {
 
     get value() : string {
         return this.props.value
     }
 
-    public static create(props : IDefaultProp) : PropsResponse<OrderUsername> {
-        const GuardResponse = Guard.againstNullOrUndefined(props.value, "ORDER_USERNAME")
+    public static create(props : IDefaultProp) : PropsResponse<OrderPayment> {
+        const GuardResponse = Guard.againstNullOrUndefined(props.value, "ORDER_PAYMENT")
 
         if (GuardResponse.isLeft()) {
             return left(CommonUseCaseResult.InvalidValue.create({
                 errorMessage: `${GuardResponse.value.error.errorMessage}`,
-                variable: "ORDER_USERNAME",
-                location: `${OrderUsername.name}.${OrderUsername.create.name}`
+                variable: "ORDER_PAYMENT",
+                location: `${OrderPayment.name}.${OrderPayment.create.name}`
             }))
         }
 
-        return right(new OrderUsername(props))
+        return right(new OrderPayment(props))
     }
 }

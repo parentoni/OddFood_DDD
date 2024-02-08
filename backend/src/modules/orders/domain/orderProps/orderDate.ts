@@ -4,25 +4,29 @@ import { ValueObject } from "../../../../shared/domain/ValueObject";
 import { PropsResponse } from "../../../../shared/utils/PropsType";
 import { IDefaultProp } from "../../../user/domain/userProps/userEmail";
 import { CommonUseCaseResult } from "../../../../shared/core/Response/UseCaseError";
+import mongoose, { Date } from "mongoose";
 
+interface IDateProp {
+    value : string
+}
 
-export class OrderUsername extends ValueObject<IDefaultProp> {
+export class OrderDate extends ValueObject<IDateProp> {
 
     get value() : string {
         return this.props.value
     }
 
-    public static create(props : IDefaultProp) : PropsResponse<OrderUsername> {
-        const GuardResponse = Guard.againstNullOrUndefined(props.value, "ORDER_USERNAME")
-
+    public static create(props : IDateProp) : PropsResponse<OrderDate> {
+        const GuardResponse = Guard.againstNullOrUndefined(props.value, "ORDER_DATE")
+        
         if (GuardResponse.isLeft()) {
             return left(CommonUseCaseResult.InvalidValue.create({
                 errorMessage: `${GuardResponse.value.error.errorMessage}`,
-                variable: "ORDER_USERNAME",
-                location: `${OrderUsername.name}.${OrderUsername.create.name}`
+                variable: "ORDER_DATE",
+                location: `${OrderDate.name}.${OrderDate.create.name}`
             }))
         }
 
-        return right(new OrderUsername(props))
+        return right(new OrderDate(props))
     }
 }

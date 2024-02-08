@@ -5,6 +5,6 @@ export type CreateInvoiceDTO = {
   service: SUPPORTED_PAYMENT_SERVICES,
   payment: {
     amount: number,
-    user_id: string,
+    order_id: string,
   }
 }
