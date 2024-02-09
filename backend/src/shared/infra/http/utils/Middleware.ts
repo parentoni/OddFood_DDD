@@ -34,3 +34,37 @@
 //     };
 //   }
 // }
+
+import { NextFunction, Request, Response } from "express"
+import { Secrets } from "../../../../config/secretsManager"
+import { Guard } from "../../../core/Guard"
+import { AuthService } from "../../../../modules/user/services/implementations/authService"
+export class Middleware {
+    
+    public static authenticate() {
+        return (async (req : Request, res : Response, next : NextFunction) => {
+
+            const token = req.headers.authorization?.split(' ')[1]
+
+            const GuardResponse = Guard.againstNullOrUndefined(token, "TOKEN")
+
+            if (GuardResponse.isLeft() || !token) {
+                return res.status(401).send(GuardResponse)
+            }
+
+            const decoded = await new AuthService(Secrets.getSecret("SECRET_KEY")).decodeJWT(token)
+
+            if (decoded.isRight()) {
+                console.log('hello', decoded.value)
+                if (decoded.value.role !== 1) {
+                    return res.status(401).send("Unauthorized account")
+                }
+                return next()
+            }else {
+                return res.status(401).send(decoded.value)
+            }
+
+
+        })
+    }
+}

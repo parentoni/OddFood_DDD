@@ -1,7 +1,9 @@
-import { IItem, Item } from "./item";
-
+import { Either, left, right } from "../../../utils/shared/Result";
+import { Item } from "./item";
+import {IItem, Price} from "../../../utils/services/dtos/item"
+import { IItemWithObservations } from "../../../utils/services/dtos/item";
 export class Items {
-    items : Item[]
+    items : Item[] 
     constructor (props : Item[]) {
         this.items = props
     }    
@@ -10,7 +12,7 @@ export class Items {
         return new Items(props)
     }
 
-    public static createFromPersistent(props : IItem[]) {
+    public static createFromPersistent(props : IItem[] | IItemWithObservations[]) {
         const items :Item[] = []
 
         for (const item of props) {
@@ -20,19 +22,48 @@ export class Items {
         return Items.create(items)
     }
 
-    public getDailyItem() {
-        let day = (new Date()).getDay()
+    public getDailyItem() : Either<null, Item> {
+        let day = (new Date()).getDay() + 1
         
         for (const item of this.items) {
             if (item.props.specialDay === day) {
-                return item.props
+                return right(item)
             }
         }
 
-        return null
+        return left(null)
     }
 
-    public getPrimary() {
+    public getPrimary() :  Item[]  {
+
+        const primaryItems = []
+
+        for (const item of this.items) {
+            if (item.props.isPrimary === true && item.props.specialDay === 0) {
+                primaryItems.push(item)
+            }
+        }
+        return primaryItems
+    }
+
+    public getSecondary() : Item[] {
+        const secondaryItems = []
+
+        for (const item of this.items) {
+            if (item.props.isPrimary === false) {
+                secondaryItems.push(item)
+            }
+        }
+        return secondaryItems
+    }
+
+    public getItemById(id : string) : Either<null, Item>{
         
+        for (const item of this.items) {
+            if (item.props._id === id) {
+                return right(item)
+            }
+        }
+        return left(null)
     }
 }

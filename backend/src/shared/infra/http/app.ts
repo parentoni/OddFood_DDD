@@ -5,8 +5,8 @@ import bodyParser from "body-parser";
 import morgan from "morgan";
 import helmet from "helmet";
 import cors from "cors";
+import { connect } from "../database/config";
 const app = express(); //
-
 
 app.use(morgan(Secrets.NODE_ENV === "development" ? "dev" : "common"));
 app.use(bodyParser.json());

@@ -26,7 +26,6 @@ export class CreateItemUseCase implements UseCase<IItemNoId, CreateItemResponse 
 
     async execute(item : IItemNoId) : CreateItemResponse {
         const nameOrError =  ItemName.create({value : item.name})
-        const costOrError =  ItemCost.create({value : item.cost as number})
         const descriptionOrError =  ItemDescription.create({value : item.description})
         const imageOrError =  ItemPicture.create({value : item.image})
         const pricesOrError =  ItemPrices.create(item.prices)
@@ -34,9 +33,6 @@ export class CreateItemUseCase implements UseCase<IItemNoId, CreateItemResponse 
 
         if (nameOrError.isLeft()) {
             return left(nameOrError.value)
-        }
-        if (costOrError.isLeft()) {
-            return left(costOrError.value)
         }
         if (descriptionOrError.isLeft()) {
             return left(descriptionOrError.value)
@@ -53,7 +49,6 @@ export class CreateItemUseCase implements UseCase<IItemNoId, CreateItemResponse 
 
         const ItemOrError = Item.create({
             name : nameOrError.value,
-            cost : costOrError.value,
             description : descriptionOrError.value,
             picture : imageOrError.value,
             prices : pricesOrError.value,

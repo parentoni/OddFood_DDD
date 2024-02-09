@@ -14,7 +14,7 @@ const UserSchema = new mongoose.Schema({
     name : {type : String},
     email : {type : String},
     // grade : {type : USER_GRADE},
-    role : {type : USER_ROLE},
+    role : {type : Number},
     password : {type : String},
 })
 

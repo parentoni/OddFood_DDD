@@ -4,7 +4,7 @@ import { DomainEvents } from "../../../domain/events/DomainEvents";
 import { UniqueGlobalId } from "../../../domain/UniqueGlobalD";
 
 const PaymentSchema = new mongoose.Schema({
-  user: {type: mongoose.Types.ObjectId, required: true}, // Id do usuário
+  order_id: {type: mongoose.Types.ObjectId, required: true}, // Id do pedido
   payed: {type: Boolean, required: true, default: false}, // Payment pago ou não
   amount: {type: Number, required: true}, // Quantidade monetária em BRL
   external_id: {type: String, required:true, unique:true}, // Id de rastreamento externo
@@ -13,7 +13,7 @@ const PaymentSchema = new mongoose.Schema({
 
 export interface PersistentPayment {
   _id: string,
-  user: string,
+  order_id: string,
   payed: boolean,
   amount: number,
   external_id: string
