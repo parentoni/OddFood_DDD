@@ -14,6 +14,7 @@ import { IPaymentService } from "../../../payments/services/IPaymentServices";
 import { createInvoiceUseCase } from "../../../payments/useCases/createInvoice";
 import { CreateInvoiceDTO } from "../../../payments/useCases/createInvoice/createInvoiceDTO";
 import { SUPPORTED_PAYMENT_SERVICES } from "../../../payments/services/implementations/payment_services";
+import { OrderMap } from "../../mapper/orderMap";
 
 
 export class CreateOrderUseCase implements UseCase<IOrderWithoutId, RepositoryBaseResult<{ message: string }>> {
@@ -25,7 +26,6 @@ export class CreateOrderUseCase implements UseCase<IOrderWithoutId, RepositoryBa
     async execute(props : IOrderWithoutId) : RepositoryBaseResult<{ message: string }> {
         const dateOrError = OrderDate.create({value : props.date})
         const itemsOrError = await OrderItems.create({value : props.items})
-        const paymentOrError = OrderPayment.create({value : props.payment})
         const usernameOrError = OrderUsername.create({value : props.username})
         
         if (dateOrError.isLeft()) {
@@ -33,9 +33,6 @@ export class CreateOrderUseCase implements UseCase<IOrderWithoutId, RepositoryBa
         }
         if (itemsOrError.isLeft()) {
             return left(itemsOrError.value)
-        }
-        if (paymentOrError.isLeft()) {
-            return left(paymentOrError.value)
         }
         if (usernameOrError.isLeft()) {
             return left(usernameOrError.value)
@@ -45,7 +42,6 @@ export class CreateOrderUseCase implements UseCase<IOrderWithoutId, RepositoryBa
             date : dateOrError.value,
             username : usernameOrError.value,
             items : itemsOrError.value,
-            payment : paymentOrError.value,
             paid : false,
         })
 
@@ -64,17 +60,13 @@ export class CreateOrderUseCase implements UseCase<IOrderWithoutId, RepositoryBa
         try {
             
 
-            const order = await this.orderRepo.save({ dto : {date : props.date,
-                username : orderOrError.value.username,
-                items : orderOrError.value.items,
-                payment : orderOrError.value.payment,
-                paid : false,
-                _id : orderOrError.value.id.toValue()}})
+                const orderPersistent = OrderMap.toPersistent(orderOrError.value)
 
 
-                if (order.isLeft()) {
-                    return left(order.value)
+                if (orderPersistent.isLeft()) {
+                    return left(orderPersistent.value)
                 }
+
                 let value = 0
 
                 for (const orderValue of orderOrError.value.items) {
@@ -89,7 +81,13 @@ export class CreateOrderUseCase implements UseCase<IOrderWithoutId, RepositoryBa
                     }))
                 }
 
-                const paymentInfo = await createInvoiceUseCase.execute({service : SUPPORTED_PAYMENT_SERVICES.PIX, payment : {amount : value, order_id : orderOrError.value.id.toString()}})
+                const order = await this.orderRepo.save({dto : orderPersistent.value})
+
+                if (order.isLeft()) {
+                    return left(order.value)
+                }
+
+                const paymentInfo = await createInvoiceUseCase.execute({service : SUPPORTED_PAYMENT_SERVICES.PIX, payment : {amount : value, order_id : orderPersistent.value._id}})
 
                 if (paymentInfo.isLeft()) {
                     return left(paymentInfo.value)

@@ -36,7 +36,7 @@ export class CreateInvoiceUseCase implements UseCase<CreateInvoiceDTO, CreateInv
     }
 
     //Check for non-existing user
-    const order = await this.findOrderById.execute( request.payment.order_id)
+    const order = await this.findOrderById.execute(request.payment.order_id)
     if (order.isLeft()) {
       return left(CreateInvoiceErrors.UserNotFound(request.payment.order_id))
     }
@@ -45,7 +45,7 @@ export class CreateInvoiceUseCase implements UseCase<CreateInvoiceDTO, CreateInv
     const paymentExternalId = PaymentExternalId.createNew()
 
     //Create payment aggregate
-    const payment = Payment.create({order_id: new UniqueGlobalId(order.value._id), amount: request.payment.amount, payed:false, externalId: paymentExternalId, service: request.service})
+    const payment = Payment.create({order_id: new UniqueGlobalId(request.payment.order_id), amount: request.payment.amount, payed:false, externalId: paymentExternalId, service: request.service})
     if (payment.isLeft()) {
       return left(payment.value)
     }

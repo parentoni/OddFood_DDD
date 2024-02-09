@@ -15,7 +15,6 @@ export interface IOrderItem {
 export interface IOrderWithoutId {
     username : string,
     items : any,
-    payment : string,
     date : string,
     paid : boolean,
 }
@@ -23,16 +22,22 @@ export interface IOrderWithoutId {
 const OrderSchema = new mongoose.Schema({
     username : {type : String, required : true},
     items : {type : Array<IOrderItem>, requried : true},
-    payment : {type : String, required : true},
-    date : {type : String, required : true},
+    date : {type : Date, required : true},
     paid : {type : Boolean, required: true}
 })
 
 export interface IOrder {
     username : string,
     items : any,
-    payment : string,
     date : string,
+    paid : boolean,
+    _id : string
+}
+
+export interface IOrderWithDate {
+    username : string,
+    items : any,
+    date : Date,
     paid : boolean,
     _id : string
 }

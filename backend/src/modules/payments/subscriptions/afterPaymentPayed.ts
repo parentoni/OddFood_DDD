@@ -3,6 +3,7 @@ import { IHandle } from "../../../shared/domain/events/IHandle";
 import { findOrderByIdUseCase } from "../../orders/useCases/findOrderUseCase/index";
 import { PaymentPayed } from "../domain/events/PaymentPayed";
 import { orderRepo } from "../../orders/useCases/createOrderUseCase";
+import { OrderMap } from "../../orders/mapper/orderMap";
 /**
  * @description After payment payed subscription, will run every time payment is payed
  * @author Arthur Parentoni Guimaraes <parentoni.arthur@gmail.com>
@@ -26,9 +27,15 @@ export class AfterPaymentPayed implements IHandle<PaymentPayed> {
       console.log("ERRO AO EFETUAR O PAGAMENTO DO PEDIDO")
       return
     }
-    order.value.paid = true
+    const orderWithDate = OrderMap.stringToDate(order.value)
 
-    await orderRepo.save({dto : order.value})
+    if (orderWithDate.isLeft()) {
+      return
+    }
+
+    orderWithDate.value.paid = true
+
+    await orderRepo.save({dto : orderWithDate.value})
 
     console.log("[AfterPaymentPayed]: PAGAMENT EFETUADO COM SUCESSO")
   }
