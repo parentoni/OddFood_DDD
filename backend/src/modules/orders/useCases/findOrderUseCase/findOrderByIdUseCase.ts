@@ -25,13 +25,11 @@ export class FindOrderByIdUseCase implements UseCase<string, RepositoryBaseResul
     }
     
     try {
-      console.log(request, "AAH")
       const user = await this.orderRepo.find_one({dto : request})
     
       if (user.isLeft()) {
         return left(user.value)
       }
-
     return right(user.value)
 
     }catch (err) {

@@ -78,4 +78,20 @@ export class Cart {
 
         return price
     }
+
+    public toPersistent() {
+        const items = []
+
+        for (const item of this.cart.items) {
+            items.push({
+                _id : item.props._id,
+                name : item.props.name,
+                cost : item.props.prices[0].cost,
+                observations : item.props.observations,
+                price : item.props.prices[0].price,
+                size : item.props.prices[0].name
+            })
+        }
+        return items
+    }
 }

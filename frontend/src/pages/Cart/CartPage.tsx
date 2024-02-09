@@ -13,7 +13,6 @@ export const CartPage = () => {
     const {cart} = useContext(CartContext)
     const [cartItemsAndAmount, setCartItemsAndAmount] = useState<{items : Item[], amounts : number[]} | undefined>(undefined)
     useEffect(() => {
-        console.log('dasdsa')
         setCartItemsAndAmount(cart?.getItemsWithAmount())
     }, [cart?.cart.items.length])
     // cartItemsAndAmount[0] == items, [1] == amounts
@@ -70,7 +69,8 @@ export const CartPage = () => {
                     }
                     <CartFooter/>
                 </div>
-                
+              
+
 
             </div>
             {/* <CartFooter/> */}
