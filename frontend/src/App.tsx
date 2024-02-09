@@ -2,12 +2,17 @@ import './App.css';
 import { RouterProvider } from 'react-router-dom';
 import router from './Routes';
 import { FoodContextProvider } from './modules/food/context/itemsContext';
+import { CartContextProvider } from './modules/cart/context/cartContext';
 
 function App() {
   return (
-    <FoodContextProvider>
-      <RouterProvider router={router}/>
-    </FoodContextProvider>
+    
+      <FoodContextProvider>
+        <CartContextProvider>
+        <RouterProvider router={router}/>
+        </CartContextProvider>
+      </FoodContextProvider>
+   
   );
 }
 

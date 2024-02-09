@@ -16,20 +16,19 @@ export class ItemSpecialDay extends ValueObject<INumberProp>{
         return this.props.value
     }
 
-    public static  create( props : INumberProp) : ItemDayResponse {
+    public static create( props : INumberProp) : ItemDayResponse {
 
-        const GuardResponse = Guard.againstNullOrUndefined(props.value, "ITEM_PICTURE")
+        
 
-        if (GuardResponse.isLeft()) {
-            return left(CommonUseCaseResult.InvalidValue.create({
-                errorMessage: `${GuardResponse.value.error.errorMessage}`,
-                variable: "ITEM_PICTURE",
-                location: `${ItemSpecialDay.name}.${ItemSpecialDay.create.name}`
-            }))
+        if (typeof props.value === "number" || props.value === null) {
+            return right(new ItemSpecialDay(props))
         }
-    
-        return right(new ItemSpecialDay(props))
-
+        return left(CommonUseCaseResult.InvalidValue.create({
+            errorMessage: `Day specified is not valid.`,
+            variable: "ITEM_DAY",
+            location: `${ItemSpecialDay.name}.${ItemSpecialDay.create.name}`
+        }))
+        
 
     }
 }

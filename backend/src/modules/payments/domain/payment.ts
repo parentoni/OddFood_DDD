@@ -8,7 +8,7 @@ import { SUPPORTED_PAYMENT_SERVICES } from "../services/implementations/payment_
 import { PaymentPayed } from "./events/PaymentPayed";
 
 export interface IPaymentProps {
-  user: UniqueGlobalId,
+  order_id: UniqueGlobalId,
   amount: number,
   payed: boolean,
   externalId: PaymentExternalId,
@@ -20,8 +20,8 @@ export interface IPaymentProps {
  * */
 
 export class Payment extends AggregateRoot<IPaymentProps> {
-  get user(): UniqueGlobalId {
-    return this.props.user
+  get order_id(): UniqueGlobalId {
+    return this.props.order_id
   }
 
   get amount(): number {
@@ -52,7 +52,7 @@ export class Payment extends AggregateRoot<IPaymentProps> {
     
     //Guard against undefined values
     const guardResult = Guard.againstNullOrUndefinedBulk([
-      {argument: props.user, argumentName: "USER"},
+      {argument: props.order_id, argumentName: "USER"},
       {argument: props.amount, argumentName: "AMOUNT"},
       {argument: props.payed, argumentName: "PAYED"},
       {argument: props.externalId, argumentName: "EXTERNAL_ID"}

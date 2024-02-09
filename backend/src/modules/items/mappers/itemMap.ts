@@ -13,7 +13,6 @@ export class ItemMap {
         try {
             const domain : IItem = {
                 name : props.props.name.value,
-                cost : props.props.cost.value,
                 image : props.props.picture.value,
                 prices : props.props.prices.value,
                 isPrimary : props.props.isPrimary,
@@ -30,7 +29,6 @@ export class ItemMap {
 
     public toDomain(item : IItem) : Either<CommonUseCaseResult.UnexpectedError | CommonUseCaseResult.InvalidValue, Item> {
         const nameOrError =  ItemName.create({value : item.name})
-        const costOrError =  ItemCost.create({value : item.cost as number})
         const descriptionOrError =  ItemDescription.create({value : item.description})
         const imageOrError =  ItemPicture.create({value : item.image})
         const pricesOrError =  ItemPrices.create(item.prices)
@@ -39,9 +37,7 @@ export class ItemMap {
         if (nameOrError.isLeft()) {
             return left(nameOrError.value)
         }
-        if (costOrError.isLeft()) {
-            return left(costOrError.value)
-        }
+      
         if (descriptionOrError.isLeft()) {
             return left(descriptionOrError.value)
         }
@@ -57,7 +53,6 @@ export class ItemMap {
 
         const itemOrError = Item.create({
             name : nameOrError.value,
-            cost : costOrError.value,
             description : descriptionOrError.value,
             picture : imageOrError.value,
             prices : pricesOrError.value,

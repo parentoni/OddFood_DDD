@@ -1,6 +1,5 @@
 import { Left, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
-import { FindUserByIdUseCase } from "../../../user/useCase/findUserById/findUserByIdUseCase";
 import { Payment } from "../../domain/payment";
 import { PaymentExternalId } from "../../domain/paymentExternalId";
 import { IPaymentRepo } from "../../repo/IPaymentRepo";
@@ -9,8 +8,8 @@ import { SUPPORTED_PAYMENT_SERVICES, pixService } from "../../services/implement
 import { CreateInvoiceDTO } from "./createInvoiceDTO";
 import { CreateInvoiceErrors } from "./createInvoiceErrors";
 import { CreateInvoiceResponse } from "./createInvoiceResponse";
-
-
+import { FindOrderByIdUseCase } from "../../../orders/useCases/findOrderUseCase/findOrderByIdUseCase";
+import { UniqueGlobalId } from "../../../../shared/domain/UniqueGlobalD";
 //Mapping service name -> service
 const services: {[x in SUPPORTED_PAYMENT_SERVICES]: IPaymentService} = {
   PIX: pixService
@@ -21,11 +20,11 @@ const services: {[x in SUPPORTED_PAYMENT_SERVICES]: IPaymentService} = {
  * */
 export class CreateInvoiceUseCase implements UseCase<CreateInvoiceDTO, CreateInvoiceResponse> {
 
-  findUserById: FindUserByIdUseCase;
+  findOrderById: FindOrderByIdUseCase;
   paymentRepo: IPaymentRepo;
 
-  constructor(findUserById: FindUserByIdUseCase, paymentRepo: IPaymentRepo) {
-    this.findUserById = findUserById
+  constructor(findOrderById: FindOrderByIdUseCase, paymentRepo: IPaymentRepo) {
+    this.findOrderById = findOrderById
     this.paymentRepo = paymentRepo
   }
 
@@ -37,16 +36,16 @@ export class CreateInvoiceUseCase implements UseCase<CreateInvoiceDTO, CreateInv
     }
 
     //Check for non-existing user
-    const user = await this.findUserById.execute(request.payment.user_id)
-    if (user.isLeft()) {
-      return left(CreateInvoiceErrors.UserNotFound(request.payment.user_id))
+    const order = await this.findOrderById.execute(request.payment.order_id)
+    if (order.isLeft()) {
+      return left(CreateInvoiceErrors.UserNotFound(request.payment.order_id))
     }
 
     //Create external payment id
     const paymentExternalId = PaymentExternalId.createNew()
 
     //Create payment aggregate
-    const payment = Payment.create({user: user.value.id, amount: request.payment.amount, payed:false, externalId: paymentExternalId, service: request.service})
+    const payment = Payment.create({order_id: new UniqueGlobalId(request.payment.order_id), amount: request.payment.amount, payed:false, externalId: paymentExternalId, service: request.service})
     if (payment.isLeft()) {
       return left(payment.value)
     }

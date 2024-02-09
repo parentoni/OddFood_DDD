@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
-
+//special day: 0 === no special day
 export interface Price {
     name : string,
-    price : number
+    price : number,
+    cost : number
 }
 
 const ItemSchema = new mongoose.Schema({
@@ -11,7 +12,6 @@ const ItemSchema = new mongoose.Schema({
     description : {type : String, required : true},
     image : {type : String, required : false},
     isPrimary : {type : Boolean, required : true},
-    cost : {type : Number, required : true},
     specialDay : {type : Number, required: true}
 })
 
@@ -21,7 +21,6 @@ export interface IItemNoId {
     description : string,
     image : string,
     isPrimary : Boolean,
-    cost : number,
     specialDay : number,
 }
 
@@ -32,9 +31,18 @@ export interface IItem {
     description : string,
     image : string,
     isPrimary : Boolean,
-    cost : number,
     specialDay : number,
+}
 
+export interface IItemWithObservations {
+    _id : string,
+    name : string,
+    prices : Price[],
+    description : string,
+    image : string,
+    isPrimary : Boolean,
+    specialDay : number,
+    observations : string 
 }
 
 const ItemModel = mongoose.model('item', ItemSchema)

@@ -9,10 +9,10 @@ import { PaymentExternalId } from "../domain/paymentExternalId";
 export class PaymentMap {
   public static toDomain(persistent: PersistentPayment): Either<CommonUseCaseResult.InvalidValue, Payment> {
 
-    const userIdOrError = UniqueGlobalId.createExisting(persistent.user)
+    const orderIdOrError = UniqueGlobalId.createExisting(persistent.order_id)
     const externalIdOrError = PaymentExternalId.create({txid: persistent.external_id})
 
-    const combineResult = EitherUtils.combine([userIdOrError, externalIdOrError])
+    const combineResult = EitherUtils.combine([orderIdOrError, externalIdOrError])
 
     if (combineResult.isLeft()) {
       return left(combineResult.value)
@@ -21,7 +21,7 @@ export class PaymentMap {
 
     
     const domain = Payment.create({
-      user: userIdOrError.getRight(),
+      order_id: orderIdOrError.getRight(),
       externalId: externalIdOrError.getRight(),
       amount: persistent.amount,
       payed: persistent.payed,
@@ -38,7 +38,7 @@ export class PaymentMap {
   public static toPersistent(domain: Payment): PersistentPayment {
     return {
       _id: domain.id.toValue(),
-      user: domain.user.toValue(),
+      order_id: domain.order_id.toValue(),
       amount: domain.amount,
       payed: domain.payed,
       external_id: domain.externalId.value,

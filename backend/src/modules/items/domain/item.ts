@@ -19,7 +19,6 @@ export interface IItemProps {
     prices : ItemPrices,
     picture : ItemPicture,
     description : ItemDescription,
-    cost : ItemCost,
     isPrimary : Boolean,
     specialDay : ItemSpecialDay
 }
@@ -54,10 +53,9 @@ export class Item extends AggregateRoot<IItemProps> {
 
     public static create(props : IItemProps, id? : UniqueGlobalId) : ItemResponse {
         const GuardResponse = Guard.againstNullOrUndefinedBulk([
-            {argument : props.name.value, argumentName : "USER_NAME"},
-            {argument : props.description.value, argumentName : "USER_EMAIL"},
-            {argument : props.cost.value, argumentName : "USER_PASSWORD"},
-            {argument : props.picture.value, argumentName : "USER_GRADE"}
+            {argument : props.name.value, argumentName : "ITEM_NAME"},
+            {argument : props.description.value, argumentName : "ITEM_DESCRIPTION"},
+            {argument : props.picture.value, argumentName : "ITEM_PICTURE"}
         ])
 
         if (GuardResponse.isLeft()) {
