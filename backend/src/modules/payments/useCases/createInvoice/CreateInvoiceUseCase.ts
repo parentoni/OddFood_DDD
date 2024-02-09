@@ -37,7 +37,7 @@ export class CreateInvoiceUseCase implements UseCase<CreateInvoiceDTO, CreateInv
     }
 
     //Check for non-existing user
-    const user = await this.findUserById.execute({id: request.payment.user_id})
+    const user = await this.findUserById.execute(request.payment.user_id)
     if (user.isLeft()) {
       return left(CreateInvoiceErrors.UserNotFound(request.payment.user_id))
     }

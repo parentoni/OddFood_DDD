@@ -1,3 +1,4 @@
+import { textSpanEnd } from "typescript";
 import { Guard } from "../../../../shared/core/Guard";
 import { Left, left, right } from "../../../../shared/core/Result";
 import { UseCase } from "../../../../shared/core/UseCase";
@@ -30,13 +31,13 @@ export class PixCallbackUseCase implements UseCase<PixCallbackDTO, PixCallbackRe
     }
 
     //Check if payment with external id exists
-    const repoResponse = await this.paymentsRepo.findOneByExternalId(request.pix.txid)
+    const repoResponse = await this.paymentsRepo.findOneByExternalId(request.pix[0].txid)
     if (repoResponse.isLeft()) {
       return left(repoResponse.value)
     }
 
     //If Payment exists, run service
-    const serviceResponse = await pixService.callbackInterpreter({payment: repoResponse.value, paymentDTO: request.pix})
+    const serviceResponse = await pixService.callbackInterpreter({payment: repoResponse.value, paymentDTO: request.pix[0]})
     if (serviceResponse.isLeft()) {
       return left(serviceResponse.value)
     }
