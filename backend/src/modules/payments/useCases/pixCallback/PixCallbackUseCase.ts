@@ -6,6 +6,7 @@ import { IPaymentRepo } from "../../repo/IPaymentRepo";
 import { pixService } from "../../services/implementations/payment_services";
 import { PixCallbackDTO } from "./PixCallbackDTO";
 import { PixCallbackResponse } from "./PixCallbackResponse";
+import { PixCob } from "../../dtos/PixDTO";
 
 /**
  *@description Use case that handles pix Payment gateways/APIs callbacks.
@@ -25,19 +26,21 @@ export class PixCallbackUseCase implements UseCase<PixCallbackDTO, PixCallbackRe
   async execute(request: PixCallbackDTO): Promise<PixCallbackResponse> {
 
     //Check if request.pix exists, in other words, if request was sent
-    const guardResponse = Guard.againstNullOrUndefined(request.pix, "PIX")
+    const guardResponse = Guard.againstNullOrUndefined(request.pix[0], "PIX")
     if (guardResponse.isLeft()) {
       return left(guardResponse.value)
     }
 
+    const pix = request.pix[0] as PixCob
+
     //Check if payment with external id exists
-    const repoResponse = await this.paymentsRepo.findOneByExternalId(request.pix[0].txid)
+    const repoResponse = await this.paymentsRepo.findOneByExternalId(pix.txid)
     if (repoResponse.isLeft()) {
       return left(repoResponse.value)
     }
 
     //If Payment exists, run service
-    const serviceResponse = await pixService.callbackInterpreter({payment: repoResponse.value, paymentDTO: request.pix[0]})
+    const serviceResponse = await pixService.callbackInterpreter({payment: repoResponse.value, paymentDTO: pix})
     if (serviceResponse.isLeft()) {
       return left(serviceResponse.value)
     }

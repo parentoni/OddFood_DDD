@@ -1,4 +1,4 @@
-import { GerenciaNet } from "./GerenciaNet"; 
+import { GerenciaNet } from "./gerenciaNet"; 
 
 const gerenciaNetPix = new GerenciaNet()
 

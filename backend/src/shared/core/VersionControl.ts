@@ -1,6 +1,6 @@
 import semver from "semver";
 import { Guard } from "./Guard";
-import { Either, left, right } from "./Result";
+import { Either, Left, left, right } from "./Result";
 import { GenericError, IBaseError } from "./Response/Error";
 import { CommonUseCaseResult } from "./Response/UseCaseError";
 
@@ -63,18 +63,37 @@ export class VersionControl<T> {
 
       if (highestVersion.isLeft()) {
         return left(highestVersion.value);
-      } else {
-        return right(this.register[highestVersion.value]);
+      } 
+
+      const registeredItem: T | undefined = this.register[highestVersion.getRight()]
+
+      //Check if registered item exists
+      if (!registeredItem) {
+        return left(CommonUseCaseResult.InvalidValue.create({
+            errorMessage: "Unable to find registered item",
+            variable: "REGSITERED_ITEM",
+            location: "VersionControl.getVersion"
+        }))
       }
+
+      return right(registeredItem);
     }
   }
 
   private findVersionInRegister(version: string): Either<GenericError<IBaseError>, T> {
-    const cachedVersionData = this.register[version];
+    const cachedVersionData : T|undefined= this.register[version];
 
     const check = Guard.againstNullOrUndefined(cachedVersionData, "Cached version data");
     if (check.isLeft()) {
       return left(check.value);
+    }
+    
+    if (!cachedVersionData){
+      return left(CommonUseCaseResult.InvalidValue.create({
+        errorMessage: "Unable to find registered item",
+        variable: "REGSITERED_ITEM",
+        location: "VersionControl.getVersion"
+      }))
     }
 
     return right(cachedVersionData);
@@ -100,9 +119,9 @@ export class VersionControl<T> {
     if (checkEmpty.isRight()) {
       let max: string = "0.0.0";
       for (let i = 0; i < Object.keys(this.register).length; i++) {
-        const v = Object.keys(this.register)[i];
+        const v = Object.keys(this.register)[i] || '0.0.1'
 
-        if (semver.gt(v, max)) {
+        if (semver.gt(v , max)) {
           max = v;
         }
       }
