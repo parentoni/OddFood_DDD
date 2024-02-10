@@ -8,7 +8,8 @@
     "start-production": "pm2 start pm2.json",
     "pretty": "prettier --write \"src/**/*.ts\"",
     "build": "tsc",
-    "test": "jest --config jest.config.js --runInBand --no-cache --detectOpenHandles"
+    "test": "jest --config jest.config.js --runInBand --no-cache --detectOpenHandles",
+    "lint": "tsc -noEmit "
   },
   "keywords": [],
   "author": "",
