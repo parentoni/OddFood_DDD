@@ -12,5 +12,5 @@ export abstract class IPixApi {
    * @method createCob
    * @description Creates PIX cobranca.
    * */
-  public abstract createCob (props: CreateInvoiceProps): Promise<Either<CommonUseCaseResult.InvalidValue, PixCob>>
+  public abstract createCob (props: CreateInvoiceProps): Promise<Either<CommonUseCaseResult.InvalidValue | CommonUseCaseResult.UnexpectedError, PixCob>>
 }

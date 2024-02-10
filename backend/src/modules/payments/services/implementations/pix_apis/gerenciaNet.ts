@@ -1,31 +1,71 @@
+import { Secrets } from "../../../../../config/secretsManager";
 import { CommonUseCaseResult } from "../../../../../shared/core/Response/UseCaseError";
-import { Either, right } from "../../../../../shared/core/Result";
+import { Either, left, right } from "../../../../../shared/core/Result";
+import { CertificatedApi } from "../../../../../shared/core/certificatedApi";
 import { PixCob, PixCobStatus } from "../../../dtos/PixDTO";
 import { CreateInvoiceProps } from "../../IPaymentServices";
 import { IPixApi } from "../../IPixAPI";
 
-//temporary until gerencianet account setup
+export type GerenciaNetOAuthResponse = {access_token:string}
 export class GerenciaNet implements IPixApi {
-  
-  public async createCob(props: CreateInvoiceProps): Promise<Either<CommonUseCaseResult.InvalidValue, PixCob>> {
+  gerenciaNetApi: CertificatedApi;
+ 
+  // Dependency injection of gerencia net certificated api
+  constructor(gerenciaNetApi: CertificatedApi) {
+    this.gerenciaNetApi = gerenciaNetApi
+  }
 
-    return right({
-      calendario: {
-        criacao: "2020-09-09T20:15:00.358Z",
-        expiracao: 3600
-      },
-      txid: props.payment.externalId.value,
-      valor: {
-        original: props.payment.amount.toFixed(2)
-      },
-      revisao: 0,
-      status: PixCobStatus.ATIVA,
-      devedor: {
-        cnpj: '000.000.000/0000-00',
-        name: "",
-      },
-      chave: "000.000.000-00",
+  public async createCob(props: CreateInvoiceProps): Promise<Either<CommonUseCaseResult.InvalidValue | CommonUseCaseResult.UnexpectedError, PixCob>> {
 
+    //Authenticate using oauth
+    const OAuthResponse = await this.gerenciaNetApi.request<GerenciaNetOAuthResponse>({
+      url: Secrets.getSecret('GERENCIANET_PIX_API') + '/oauth/token',
+      method: "POST",
+      headers: {
+        "Authorization": `Basic ${btoa(Secrets.getSecret("GERENCIANET_PIX_CLIENT_ID") + ":" + Secrets.getSecret("GERENCIANET_PIX_CLIENT_SECRET"))}`,// Basic authorization,
+        "Content-Type": "application/json"
+      },
+
+      data: JSON.stringify({
+        "grant_type": "client_credentials"
+      })
     })
+
+    //Check if response was null
+    if (OAuthResponse.isLeft()) {
+      return left(OAuthResponse.value)
+    }
+
+    //Generate pix
+    const cobResponse = await this.gerenciaNetApi.request<PixCob>({
+      url: Secrets.getSecret('GERENCIANET_PIX_API') + `/v2/cob/${props.payment.externalId.value}`,
+      method: 'PUT',
+      headers: {
+        "Authorization": `Bearer ${OAuthResponse.value.access_token}`,
+        "Content-Type": 'application/json'
+      },
+      data: JSON.stringify({
+        calendario: {
+          expiracao: 3600, //60 mins
+        },
+        valor: {
+          original: props.payment.amount.toFixed(2) //Value must be string
+        },
+        chave: Secrets.getSecret("GERENCIANET_PIX_CHAVE")
+      })
+    })
+
+    //Check error pix creation
+    if (cobResponse.isLeft()) {
+      return left(CommonUseCaseResult.InvalidValue.create({
+          errorMessage: "Unable able to generate pix",
+          variable: "PIX",
+          location: "Gerencianet.createCob"
+      }))
+    }
+
+
+    return right(cobResponse.value)
+
   }
 }

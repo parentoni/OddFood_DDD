@@ -28,7 +28,7 @@ export class PixService implements IPaymentService {
       const response = await api.createCob(props)
       if (response.isRight()) {
         //todo: Add qr code 
-        return right({message: "QR-CODE"})
+        return right({message: response.value.pixCopiaECola})
       }
     }
 
@@ -44,7 +44,7 @@ export class PixService implements IPaymentService {
   public async callbackInterpreter(props: CallbackInterpreterProps<PixCob>): Promise<Either<CommonUseCaseResult.InvalidValue, null>> {
 
     //Check if payed value is payment value
-    if (props.payment.amount !== Number(props.paymentDTO.valor.original)){
+    if (props.payment.amount !== Number(props.paymentDTO.valor)){
       return left(CommonUseCaseResult.InvalidValue.create({
         location: `${PixService.name}.${this.callbackInterpreter.name}`,
         errorMessage: "PIX payment did not transfered right value.",
