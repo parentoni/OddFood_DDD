@@ -16,9 +16,9 @@ export class PixCallbackController extends BaseController<Request>{
     // Register v1 controller
     this.versionRegister.addToRegister('1.0.0', async (req, res) => {
 
-      const dto = req.body as PixCob[]
+      const dto = req.body as {pix: PixCob[]}
       
-      const response = await useCase.execute({pix: dto})
+      const response = await useCase.execute(dto)
 
       if (response.isLeft()) {
         return this.errorHandler(res, response)

@@ -16,7 +16,8 @@ export type PixCob = {
   valor: {
     original: string
   },
-  chave: string
+  chave: string,
+  pixCopiaECola: string
 }
 
 export type PixCobDevedor = PixCobDevedorCNPJ | PixCobDevedorCPF

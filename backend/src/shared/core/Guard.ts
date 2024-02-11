@@ -1,5 +1,4 @@
 import { Either, right, left } from "./Result";
-import {GenericError, IBaseError, success } from "./Response/Error";
 import { CommonUseCaseResult } from "./Response/UseCaseError";
 export type GuardError = CommonUseCaseResult.InvalidValue;
 export type GuardResponse = Either<CommonUseCaseResult.InvalidValue, any>;

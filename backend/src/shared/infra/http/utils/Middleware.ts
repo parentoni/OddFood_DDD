@@ -52,7 +52,7 @@ export class Middleware {
                 return res.status(401).send(GuardResponse)
             }
 
-            const decoded = await new AuthService(Secrets.getSecret("SECRET_KEY")).decodeJWT(token)
+            const decoded = await new AuthService(Secrets.getSecret("PRIVATE_KEY")).decodeJWT(token)
 
             if (decoded.isRight()) {
                 console.log('hello', decoded.value)

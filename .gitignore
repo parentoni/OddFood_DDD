@@ -5,6 +5,8 @@
 *.env
 .DS_Store
 
+*coverage
+
 /scripts/tmp/*
 
 *dist
