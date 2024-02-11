@@ -94,4 +94,11 @@ export class Cart {
         }
         return items
     }
+
+    public clearCart() {
+        this.cart = Items.create([])
+
+        localStorage.setItem(key, JSON.stringify(Items.create([])))
+
+    }
 }

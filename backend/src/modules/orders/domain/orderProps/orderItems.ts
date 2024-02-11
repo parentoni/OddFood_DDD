@@ -45,7 +45,6 @@ export class OrderItems extends ValueObject<IItemsProps> {
 
             const GuardResponse = Guard.againstNullOrUndefinedBulk([
                 {argument : item.name, argumentName : "ITEM_NAME"},
-                {argument : item.observations, argumentName : "ITEM_OBSERVATIONS"},
                 {argument : item._id, argumentName : "ITEM_ID"},
                 {argument : item.price, argumentName : "ITEM_PRICE"},
             ]) 

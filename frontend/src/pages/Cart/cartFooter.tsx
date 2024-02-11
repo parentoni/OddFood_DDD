@@ -29,11 +29,12 @@ export const CartFooter = () => {
                         <p className='text-sm font-semibold text-gray-600 '>Coloque seu nome real para a entrega do pedido.</p>
                         <button onClick={() => {cart? createOrder(cart, name).then((res) => {
                             if (res.isLeft()) {
-                                alert("Ocorreu um erro")
+                                
+                                console.log("Ocorreu um erro")
                             } else {
                                 console.log("EBA!")
                             }
-                        }) : alert("ERRO")}} className="w-full flex flex-row items-center justify-center h-16 my-2 rounded-xl text-white font-semibold bg-red-500">
+                        }) : console.log("ERRO")}} className="w-full flex flex-row items-center justify-center h-16 my-2 rounded-xl text-white font-semibold bg-red-500">
                             <p>Gerar QR code para pagamento </p>
                         </button>
 

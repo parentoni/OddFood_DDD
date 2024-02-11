@@ -16,7 +16,7 @@ export class PixCallbackController extends BaseController<Request>{
     // Register v1 controller
     this.versionRegister.addToRegister('1.0.0', async (req, res) => {
 
-      const dto = req.body as PixCob
+      const dto = req.body as PixCob[]
       
       const response = await useCase.execute({pix: dto})
 

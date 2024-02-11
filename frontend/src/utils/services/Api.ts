@@ -16,16 +16,16 @@ export class Api {
         return left(response)
     }
 
-    public static async createOrder(props : any) : Promise<Either<Response, IOrderWithDate>> {
-        console.log(props, "props")
+    public static async createOrder(props : any) : Promise<Either<Response, null>> {
+
         const response = await fetch(this.baseUrl + "/order/create", {
             method: "POST",
             headers : {Accept : "application/json", "Content-Type" : "application/json"},
-            body: props
+            body: JSON.stringify(props)
         })
-
+        
         if (response.ok) {
-            return right(await response.json())
+            return right(null)
         }
 
         return left(response)
@@ -37,6 +37,7 @@ export class Api {
         })
 
         if (response.ok) {
+
             return right(await response.json())
         }
 
