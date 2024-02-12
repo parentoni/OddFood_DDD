@@ -16,7 +16,7 @@ export class Api {
         return left(response)
     }
 
-    public static async createOrder(props : any) : Promise<Either<Response, null>> {
+    public static async createOrder(props : any) : Promise<Either<Response, {message : string}>> {
 
         const response = await fetch(this.baseUrl + "/order/create", {
             method: "POST",
@@ -25,7 +25,7 @@ export class Api {
         })
         
         if (response.ok) {
-            return right(null)
+            return right(await response.json())
         }
 
         return left(response)

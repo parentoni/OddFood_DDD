@@ -9,7 +9,7 @@ export const DailyItemContainer = (props : {dailyItem : Item}) => {
                 <div className='flex flex-col w-[70%] pr-1'>
                     <p className='text-md font-semibold'>{props.dailyItem?.props.name}</p>
                     <p className='text-xs font-semibold text-gray-600' >{props.dailyItem?.props.description}</p>
-                    <p className='text-sm font-semibold text-gray-800' >A partir de R${props.dailyItem.getCheapestPrice()},00</p>
+                    <p className='text-sm font-semibold text-gray-800' >A partir de R${props.dailyItem.getCheapestPrice().toFixed(2).replace('.', ',')}</p>
                 </div>
                 <div className='w-[30%]'>
                     <img className=" rounded-lg w-full h-full" src={props.dailyItem?.props.image}/>

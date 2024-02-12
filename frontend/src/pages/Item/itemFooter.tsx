@@ -50,7 +50,7 @@ export const ItemFooter = (props : {chosenSize : Price, amount : number, setAmou
                 </div>
                 
             </div>
-            <button onClick={() => (item && itemValue && cart? (cart?.addToCart(Array(props.amount).fill(item)), navigate("/cart")) : "")} className="w-full flex flex-row items-center justify-center h-[40%] my-2 rounded-xl text-white font-semibold bg-red-500">
+            <button onClick={() => (item && itemValue && cart? (cart?.addToCart(Array(props.amount).fill(item)), navigate("/")) : "")} className="w-full flex flex-row items-center justify-center h-[40%] my-2 rounded-xl text-white font-semibold bg-red-500">
                 <IoCartOutline  size={32} color={"#FFFFFF"}/>
 
                 <p>&nbsp;Adicionar ao carrinho </p>

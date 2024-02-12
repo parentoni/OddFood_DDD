@@ -6,12 +6,16 @@ import { FaPlus } from "react-icons/fa";
 import { EmptyCartContainer } from "./emptyCarContainer";
 import { IoCartOutline } from "react-icons/io5";
 import { FaMinus } from "react-icons/fa";
+import { QrCodePage } from "./qrCodePage";
 import { CartFooter } from "./cartFooter";
 import { useNavigate } from "react-router-dom";
 export const CartPage = () => {
     const navigate = useNavigate()
     const {cart} = useContext(CartContext)
     const [cartItemsAndAmount, setCartItemsAndAmount] = useState<{items : Item[], amounts : number[]} | undefined>(undefined)
+    //undefined means button is loading
+    const [bought, setBought] = useState<{message : string} | null>(null)
+
     useEffect(() => {
         setCartItemsAndAmount(cart?.getItemsWithAmount())
     }, [cart?.cart.items.length])
@@ -31,7 +35,7 @@ export const CartPage = () => {
                     </div>
                 </header>
                 <div className="h-[90%] w-full flex flex-col ">
-                    {cartItemsAndAmount && cartItemsAndAmount.items.length > 0? cartItemsAndAmount.items.map((item, index) => {
+                    {cartItemsAndAmount && cartItemsAndAmount.items.length > 0 && bought === null ? cartItemsAndAmount.items.map((item, index) => {
                         return (
                             <div  className="w-full  h-[17%] bg-gray-100  flex flex-row rounded-lg px-2   py-2 my-2  ">
                                 <div className='w-[30%]'>
@@ -63,11 +67,14 @@ export const CartPage = () => {
                             //     <img className={"rounded-lg"} src={item.props.image}/>
                             // </div>
                         )
-                    }) : 
-                       <EmptyCartContainer/> 
+                    }) :
+                    bought === null?
+                       <EmptyCartContainer/> :
+                       
+                       <QrCodePage message={bought}/>
                             
                     }
-                    <CartFooter/>
+                    <CartFooter setBought={setBought} bought={bought}/>
                 </div>
               
 

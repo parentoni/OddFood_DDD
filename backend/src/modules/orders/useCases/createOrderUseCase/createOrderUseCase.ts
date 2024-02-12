@@ -90,6 +90,7 @@ export class CreateOrderUseCase implements UseCase<IOrderWithoutId, RepositoryBa
                 const paymentInfo = await createInvoiceUseCase.execute({service : SUPPORTED_PAYMENT_SERVICES.PIX, payment : {amount : value, order_id : orderPersistent.value._id}})
 
                 if (paymentInfo.isLeft()) {
+                    // console.log("ERRROOO")
                     return left(paymentInfo.value)
                 }
 

@@ -2,8 +2,11 @@ import { Items } from "../../food/domain/items"
 import { Item } from "../../food/domain/item"
 import { key } from "../context/cartContext"
 import { Console } from "console"
+import React from "react"
 export class Cart {
     cart : Items
+
+    
 
     constructor(items : Items) {
         this.cart = items
@@ -79,9 +82,10 @@ export class Cart {
         return price
     }
 
+    
+
     public toPersistent() {
         const items = []
-
         for (const item of this.cart.items) {
             items.push({
                 _id : item.props._id,

@@ -33,6 +33,7 @@ export class GerenciaNet implements IPixApi {
 
     //Check if response was null
     if (OAuthResponse.isLeft()) {
+      console.log(OAuthResponse.value)
       return left(OAuthResponse.value)
     }
 

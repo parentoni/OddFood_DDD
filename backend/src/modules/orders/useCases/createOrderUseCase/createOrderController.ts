@@ -20,7 +20,7 @@ export class CreateOrderController extends BaseController<Request> {
                 return this.errorHandler(res, result)
             }
 
-            return this.ok(res)
+            return this.ok(res, result.value)
         }catch  (err) {
             return this.fail(res, err as Error)
         }

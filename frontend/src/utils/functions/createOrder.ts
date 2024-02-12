@@ -6,11 +6,16 @@ import { IOrder } from "../services/dtos/order";
 import { Either, left, right } from "../shared/Result";
 import { Cart } from "../../modules/cart/domain/cart";
 import { Items } from "../../modules/food/domain/items";
+import { Item } from "../../modules/food/domain/item";
 export let RECENT_ORDERS_KEY = "ODDFOOD_RECENT_ORDERS"
 
+export interface RecentOrder {
+    items : Item[],
+    date : Date
+}
 
-export async function createOrder(cart : Cart, name : string) : Promise<Either<Response | null, null>> {
-
+export async function createOrder(cart : Cart, name : string, setLoading : (x : boolean) => void) : Promise<Either<Response | null, {message : string}>> {
+    setLoading(true)
     // console.log(cart.cart.items)
     console.log('heyddd')
     const date = new Date()
@@ -25,21 +30,17 @@ export async function createOrder(cart : Cart, name : string) : Promise<Either<R
 
     const response = await Api.createOrder({items : items, date : date, paid : false, username: name})
 
-    console.log('ERO')
-
     if (response.isLeft()) {
-        console.log('ERO')
         return left(response.value)
     }
-    console.log('ERO')
 
-    const recentOrders = JSON.parse(JSON.stringify(localStorage.getItem(RECENT_ORDERS_KEY)))
+    const recentOrders : RecentOrder[] = JSON.parse(JSON.parse(JSON.stringify(localStorage.getItem(RECENT_ORDERS_KEY))))
+    
     localStorage.setItem(NAME_KEY, name.trim())
 
     if (recentOrders) {
-
         if (recentOrders.length >= 5) {
-            recentOrders.pop()
+            recentOrders.splice(0, 1)
         }
 
         recentOrders.push({
@@ -54,14 +55,11 @@ export async function createOrder(cart : Cart, name : string) : Promise<Either<R
 
     }
 
-
-    
-
     cart.clearCart()
     cart.cart = Items.create([])
     localStorage.setItem(key, JSON.stringify(cart.cart))
-    console.log('hey')
-    return right(null)
+
+    return right(response.value)
 
 
 }
