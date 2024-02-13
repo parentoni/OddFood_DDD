@@ -36,7 +36,7 @@ export class OrderRepo implements IOrderRepository {
                 return left(CommonUseCaseResult.InvalidValue.create({
                     errorMessage: `An order could not be found with the specified params: ${filter.dto}`,
                     location: `${OrderRepo.name}.${this.find_one.name}`,
-                    variable: "USER_PARAMS"}))
+                    variable: "ORDER_PARAMS"}))
             }
            
 
@@ -50,7 +50,31 @@ export class OrderRepo implements IOrderRepository {
             return left(CommonUseCaseResult.UnexpectedError.create(err))
         }
     }
-    // returns right when doesnt exist
+
+    public async findByDate(filter : {date : Date}) : RepositoryBaseResult<IOrder[]> {
+        try {
+            const date = new Date()
+            date.setHours(0,0,0,0)
+            
+            const orders = await OrderModel.find( { date : {$gte : date.toISOString()}})
+
+            if (!orders || orders === null) {
+
+                return left(CommonUseCaseResult.InvalidValue.create({
+                    errorMessage: `No orders could be found in the specified timeframe: ${filter.date}`,
+                    location: `${OrderRepo.name}.${this.find_one.name}`,
+                    variable: "ORDER_PARAMS"}))
+            }
+
+            return right(orders.map(el => ({...el.toObject(), _id : el.toObject()._id.toString()})))
+
+        }catch (err) {
+            return left(CommonUseCaseResult.UnexpectedError.create(err))
+        }
+        
+
+    }
+    // returns right when doesnit exst
 
     public async exists(filter : {dto : string}) : RepositoryBaseResult<boolean> {
         try {

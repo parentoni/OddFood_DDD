@@ -7,30 +7,27 @@ import { IOrderRepository } from "../../repository/IOrderRepository";
 import { RepositoryBaseResult } from "../../../../shared/core/IBaseRepository";
 import { IOrder } from "../../../../shared/infra/database/models/Order";
 
-export class FindOrderByIdUseCase implements UseCase<string, RepositoryBaseResult<IOrder>> {
+export class FindDailyOrdersUseCase implements UseCase<void, RepositoryBaseResult<any[]>> {
   private orderRepo : IOrderRepository
 
   constructor(repo : IOrderRepository) {
     this.orderRepo = repo
   }
 
-  
+  async execute(): RepositoryBaseResult<any[]>  {
+    // const GuardResponse = Guard.againstNullOrUndefined(request, "FIND_USER_ID")
 
-  async execute(request: string ): RepositoryBaseResult<IOrder>  {
-
-    const GuardResponse = Guard.againstNullOrUndefined(request, "FIND_USER_ID")
-
-    if (GuardResponse.isLeft()) {
-      return left(GuardResponse.value)
-    }
+    // if (GuardResponse.isLeft()) {
+    //   return left(GuardResponse.value)
+    // }
     
     try {
-      const order = await this.orderRepo.find_one({dto : request})
+      const orders = await this.orderRepo.findByDate({date : new Date()})
     
-      if (order.isLeft()) {
-        return left(order.value)
+      if (orders.isLeft()) {
+        return left(orders.value)
       }
-    return right(order.value)
+    return right(orders.value)
 
     }catch (err) {
       return left(CommonUseCaseResult.UnexpectedError.create(err))

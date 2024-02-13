@@ -25,7 +25,7 @@ export const CartPage = () => {
             <div className='h-full w-full p-6 '>
 
                 <header onClick={() => {console.log(cart?.getItemsWithAmount())}} className="h-[10%] justify-between w-full flex flex-col">
-                    <FaArrowLeft onClick={() => navigate("/")} size={24}/>
+                    <FaArrowLeft className="  " onClick={() => navigate("/")} size={24}/>
                     <div className='w-full flex flex-row items-center justify-between'>
                         <h1 className='text-4xl font-semibold'>Carrinho</h1>
                         <div className="bg-red-500 w-10 items-center flex justify-center rounded-lg aspect-square ">
