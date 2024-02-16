@@ -31,7 +31,7 @@ export const CartFooter = (props : {setBought : (prop : {message : string}) => v
                         </div>
                         <div className="flex my-2 flex-row justify-between items-center">
                             <p className='text-2xl '>Nome:&nbsp;</p>
-                            <input value={name} onChange={(e) => {setName(e.target.value)}} placeholder="Ex: Henrique Parentoni Aguiar" className='h-full bg-gray-50 border-b-2 outline-[1px] px-1  rounded-b-none border-gray-600 '/>
+                            <input value={name} onChange={(e) => {setName(e.target.value)}} placeholder="Ex: Henrique Parentoni" className='h-full bg-gray-50 border-b-2 outline-[1px] px-1  rounded-b-none border-gray-600 '/>
                         </div>
                         <p className='text-sm font-semibold text-gray-600 '>Coloque seu nome real para a entrega do pedido.</p>
                         <button onClick={() => {cart? createOrder(cart, name, setLoading).then((res) => {
@@ -53,7 +53,7 @@ export const CartFooter = (props : {setBought : (prop : {message : string}) => v
                         </button>
                         </>
 :                       <button onClick={() => {props.bought !== null?  navigator.clipboard.writeText(props.bought.message) : console.log('asdasdasdasd')}} className="w-full  flex active:bg-red-600 flex-row items-center justify-center h-16 my-2 rounded-xl text-white font-semibold bg-red-500">
-                            <p className="text-xl">Copiar codigo</p>
+                            <p className="text-xl">Copiar código</p>
                         </button>
 }
                     </div>

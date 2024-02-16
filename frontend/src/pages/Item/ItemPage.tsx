@@ -73,7 +73,7 @@ export const ItemPage = () => {
                         <h2 className='text-lg font-semibold pt-2'>Alguma observação?</h2>
                         <span className="pt-2 text-md  text-gray-600">{observations.length}/80</span>
                     </div>
-                    <textarea onChange={ (e) => (e.target.value.length <= 80? setObservations(e.target.value) : '')} value={observations} className='border-2 rounded-lg p-2'  placeholder="Ex: Sem feijao"/>
+                    <textarea onChange={ (e) => (e.target.value.length <= 80? setObservations(e.target.value) : '')} value={observations} className='border-2 rounded-lg p-2'  placeholder="Ex: Sem feijão"/>
 
                     
 

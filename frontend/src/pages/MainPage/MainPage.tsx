@@ -29,8 +29,8 @@ export const MainPage = () => {
                     <DailyItemContainer dailyItem={dailyItem.value}/>
 : ''
                     }
-                    <h2 className='text-xl font-semibold'>Combina com voce</h2>
-                    <span className="text-sm font-semibold text-gray-600">Baseado em seus ultimos pedidos</span>
+                    <h2 className='text-xl font-semibold'>Combina com você</h2>
+                    <span className="text-sm font-semibold text-gray-600">Baseado em seus últimos pedidos</span>
                     <div className=" overflow-x-auto   gap-2 min-h-[100px] flex h-[100px] w-full">
                         {recentOrders && JSON.parse(recentOrders).length > 0?
                         JSON.parse(recentOrders).reverse().map((order : RecentOrder) => {

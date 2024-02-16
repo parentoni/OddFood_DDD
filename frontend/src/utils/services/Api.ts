@@ -44,5 +44,17 @@ export class Api {
         return left(response)
 
     }
+    public static async getDailyOrders() : Promise<Either<Response, IOrder[]>> {
+        const response = await fetch(this.baseUrl + "/order/daily", {
+            method : "GET"
+        })
+
+        if (response.ok) {
+
+            return right(await response.json())
+        }
+
+        return left(response)
+    }
 
 }

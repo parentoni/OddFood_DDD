@@ -3,6 +3,7 @@ import { ItemPage } from "./pages/Item/ItemPage";
 import { MainPage } from "./pages/MainPage/MainPage";
 import { useParams } from "react-router-dom";
 import { CartPage } from "./pages/Cart/CartPage";
+import { DailyOrdersPage } from "./pages/DailyOrders/dailyOrdersPage";
 
 // export function getItemId( ){
 //     let {itemId} = useParams()
@@ -20,7 +21,9 @@ const router = createBrowserRouter([
     {path : "/item/:itemId", 
     element : <ItemPage/>},
     {path : "/cart",
-element : <CartPage/>}
+element : <CartPage/>},
+    {path : "/admin/orders",
+    element : <DailyOrdersPage/>}
 ])
 
 export default router

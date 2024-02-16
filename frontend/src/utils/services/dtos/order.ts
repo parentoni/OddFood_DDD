@@ -20,3 +20,12 @@ export interface IOrderWithoutId {
     date : string,
     paid : boolean,
 }
+
+export interface IOrderItem {
+    cost : number, 
+    name : string,
+    observations : string,
+    price : number,
+    size : string,
+    _id : string
+}
