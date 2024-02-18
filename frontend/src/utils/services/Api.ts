@@ -3,7 +3,7 @@ import { IItem } from "./dtos/item"
 import { IOrder, IOrderWithDate } from "./dtos/order"
 
 export class Api {
-    static baseUrl = "http://192.168.15.23:8000"
+    static baseUrl = "https://api.oddfood"
 
     public static async getAllItems() : Promise<Either<Response, IItem[]>> {
         const response = await fetch(this.baseUrl + "/item/all", {
