@@ -22,7 +22,7 @@ export class AfterPaymentPayed implements IHandle<PaymentPayed> {
 
   // Funcao que contem logica apos paymetn payed
   private async onPaymentPayed(event: PaymentPayed): Promise<void> {
-    const order = await findOrderByIdUseCase.execute(event.payment.order_id.toString())
+    const order = await findOrderByIdUseCase.execute(event.payment.order_id.toValue())
     if (order.isLeft()) {
       console.log("ERRO AO EFETUAR O PAGAMENTO DO PEDIDO")
       return
