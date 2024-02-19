@@ -8,5 +8,6 @@ paymentsRouter.post('/create', (req, res) => createInvoiceController.execute(req
 
 // Webhooks callbacks
 paymentsRouter.post('/webhook/pix', (req, res) => pixCallbackController.execute(req, res))
+paymentsRouter.post('/webhook/pix/pix', (req, res) => pixCallbackController.execute(req, res))
 
 export {paymentsRouter}
