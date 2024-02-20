@@ -7,7 +7,9 @@ import { OrderDate } from "../domain/orderProps/orderDate";
 import { OrderItems } from "../domain/orderProps/orderItems";
 import { OrderPayment } from "../domain/orderProps/orderPayment";
 import { OrderUsername } from "../domain/orderProps/orderUsername";
+import { IOrderWithDateObject } from "../../../shared/infra/database/models/Order";
 import { IOrderWithDate } from "../../../shared/infra/database/models/Order";
+import mongoose from "mongoose";
 export class OrderMap {
     public static toPersistent(props : Order) : Either<CommonUseCaseResult.UnexpectedError, IOrderWithDate> {
         try {

@@ -35,8 +35,8 @@ export const ItemPage = () => {
     const [observations, setObservations] = useState<string>("")
     const [amount, setAmount] = useState<number>(1)
     return (
-        <div className="h-screen w-screen mb-12">
-            <div className='h-full w-full'>
+        <div className={`h-screen w-screen `}>
+            <div className={` h-[75%] w-full`}>
                 <div className='h-[40%] w-full ' >
                     <button onClick={() => navigate('/')} className="aspect-square rounded-full ml-4 mt-4  bg-white absolute   w-12 h-12 flex items-center justify-center">
                         <IoClose className="" size={24}/>
@@ -45,11 +45,11 @@ export const ItemPage = () => {
                     <img className=' h-full w-full ' src={item?.props.image}/>
                     
                 </div>
-                <div className='h-[60%] -mt-4 flex flex-col p-6 bg-white opacity-[99%] rounded-t-2xl border-t-2 w-full'>
-                    <h1 className=" self-center font-semibold pb-2 text-2xl">{item?.props.name}</h1>
+                <div className='h-[60%] -mt-4 flex flex-col px-6 pt-3 bg-white opacity-[99%] rounded-t-2xl border-t-2 w-full'>
+                    <h1 className=" self-center font-semibold pb-1 text-2xl">{item?.props.name}</h1>
                     
                     <h2 className='text-lg font-semibold '>Descrição:</h2>
-                    <span className="text-md text-gray-600 font-semibold ">
+                    <span className="text-md  leading-5  text-gray-600 font-semibold ">
                         {item?.props.description}
                     </span>
                     {item?.props.prices.length && item.props.prices.length > 1? 
@@ -73,15 +73,15 @@ export const ItemPage = () => {
                         <h2 className='text-lg font-semibold pt-2'>Alguma observação?</h2>
                         <span className="pt-2 text-md  text-gray-600">{observations.length}/80</span>
                     </div>
-                    <textarea onChange={ (e) => (e.target.value.length <= 80? setObservations(e.target.value) : '')} value={observations} className='border-2 rounded-lg p-2'  placeholder="Ex: Sem feijão"/>
+                    <textarea onChange={ (e) => (e.target.value.length <= 80? setObservations(e.target.value) : '')} value={observations} className='border-2 rounded-lg p-2 min-h-12'  placeholder="Ex: Sem feijão"/>
 
                     
 
                 </div>
                
-                    <ItemFooter chosenSize={chosenSize} amount={amount} setAmount={setAmount} item={item? item : undefined} observations={observations} />
             </div>
-            
+            <ItemFooter chosenSize={chosenSize} amount={amount} setAmount={setAmount} item={item? item : undefined} observations={observations} />
+
         </div>
     )
 }

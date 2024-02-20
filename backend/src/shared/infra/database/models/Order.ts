@@ -1,5 +1,5 @@
 
-import mongoose from "mongoose";
+import mongoose, { ObjectId } from "mongoose";
 import { IItemWithObservations } from "./Item";
 //special day: 0 === no special day
 
@@ -32,6 +32,14 @@ export interface IOrder {
     date : string,
     paid : boolean,
     _id : string
+}
+
+export interface IOrderWithDateObject {
+    username : string,
+    items : any,
+    date : Date,
+    paid : boolean,
+    _id : mongoose.Types.ObjectId  
 }
 
 export interface IOrderWithDate {

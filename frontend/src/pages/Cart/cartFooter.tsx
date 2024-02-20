@@ -34,13 +34,13 @@ export const CartFooter = (props : {setBought : (prop : {message : string}) => v
                             <input value={name} onChange={(e) => {setName(e.target.value)}} placeholder="Ex: Henrique Parentoni" className='h-full bg-gray-50 border-b-2 outline-[1px] px-1  rounded-b-none border-gray-600 '/>
                         </div>
                         <p className='text-sm font-semibold text-gray-600 '>Coloque seu nome real para a entrega do pedido.</p>
-                        <button onClick={() => {cart? createOrder(cart, name, setLoading).then((res) => {
+                        <button  onClick={() => {cart && name? createOrder(cart, name, setLoading).then((res) => {
                             if (res.isLeft()) {
-                                console.log("Ocorreu um erro")
+                                alert("Ocorreu um erro.")
                             } else {
                                 props.setBought(res.value)
                             }
-                        }) : console.log("ERRO")}} disabled={cart?.cart.items.length === 0 || cart?.cart.items.length === undefined || loading === true? true : false} className={`w-full ${cart?.cart.items.length === 0 || cart?.cart.items.length === undefined? "bg-red-300" : "bg-red-500 active:bg-red-600"} flex flex-row items-center  justify-center h-16 my-2 rounded-xl text-white font-semibold `}>
+                        }) : alert("Ocorreu um erro. Verifique o nome do pedido e tente novamente.")}} disabled={cart?.cart.items.length === 0 || cart?.cart.items.length === undefined || loading === true? true : false} className={`w-full ${cart?.cart.items.length === 0 || cart?.cart.items.length === undefined? "bg-red-300" : "bg-red-500 active:bg-red-600"} flex flex-row items-center  justify-center h-16 my-2 rounded-xl text-white font-semibold `}>
                             {loading === true?
                              <div className=" w-12 h-12 border-[10px] border-t-red-200 border-red-300  rounded-full animate-spin "></div>
 

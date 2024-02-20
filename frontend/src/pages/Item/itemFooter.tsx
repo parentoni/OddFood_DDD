@@ -27,7 +27,7 @@ export const ItemFooter = (props : {chosenSize : Price, amount : number, setAmou
    
 
     return(
-        <div className='fixed bottom-0 px-6 pt-2 bg-white border-t-[1px] rounded-t-xl w-full h-[130px]'>
+        <div className='fixed bottom-0 px-6 pt-2 bg-white border-t-[1px] rounded-t-xl w-full h-[15%]'>
             
             <div className='flex flex-row w-full justify-between '>
                 

@@ -2,10 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import ReactGA from 'react-ga4'
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+ReactGA.initialize("G-04CS4P04VX")
+
 root.render(
     <App />
 );
