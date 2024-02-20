@@ -56,7 +56,7 @@ export class OrderRepo implements IOrderRepository {
             const date = new Date()
             date.setHours(0,0,0,0)
             
-            const orders = await OrderModel.find( { date : {$gte : date.toISOString()}}, {paid : true})
+            const orders = await OrderModel.find( { date : {$gte : date.toISOString()}, paid : true})
 
             if (!orders || orders === null) {
 
