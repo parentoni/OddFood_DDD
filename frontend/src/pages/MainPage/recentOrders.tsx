@@ -18,7 +18,7 @@ export const RecentOrderBox = (props : {order : RecentOrder}) => {
         if (item.props.specialDay !== 0 && item.props.specialDay !== (new Date()).getDay() + 1) {
             const dailyItem = items?.getDailyItem()
             if (dailyItem?.isRight()) {
-                let index = dailyItem.value.props.prices.findIndex(el => el.price === item.props.prices[0].price)
+                let index = dailyItem.value.props.prices.findIndex(el => el.name === item.props.prices[0].name)
                 itemsArray.push(new Item({ 
                     _id : dailyItem.value.props._id,
                     name : dailyItem.value.props.name,
